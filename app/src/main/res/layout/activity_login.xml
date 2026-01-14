@@ -93,6 +93,7 @@
         android:id="@+id/button"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="120dp"
         android:background="@drawable/button_login"
         android:fontFamily="@font/montserrat_bold"
         android:text="LOGIN"
