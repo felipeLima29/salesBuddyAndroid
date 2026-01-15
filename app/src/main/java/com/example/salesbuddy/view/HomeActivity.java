@@ -1,7 +1,5 @@
 package com.example.salesbuddy.view;
 
-import static android.view.View.VISIBLE;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -26,6 +25,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView optRegisterSale;
     private TextView optReprocess;
     private TextView optLogOut;
+    private AppCompatButton btnRegisterSale;
+    private AppCompatButton btnReprocess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnMenu = findViewById(R.id.btnMenu);
+        btnRegisterSale = findViewById(R.id.btnRegisterSale);
+        btnReprocess = findViewById(R.id.btnReprocess);
         cardMenuOptions = findViewById(R.id.cardMenuOptions);
         optRegisterSale = findViewById(R.id.optRegisterSale);
         optReprocess = findViewById(R.id.optReprocess);
@@ -53,6 +56,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toggleMenu();
+            }
+        });
+
+        btnRegisterSale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this , RegisterSalesActivity.class);
+                startActivity(intent);
             }
         });
 
