@@ -2,6 +2,7 @@ package com.example.salesbuddy.view;
 
 import static android.view.View.VISIBLE;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private ImageButton btnMenu;
     private CardView cardMenuOptions;
-    private boolean isMenuOpen = false;
+    private boolean isMenuOpen = true;
     private TextView optRegisterSale;
     private TextView optReprocess;
     private TextView optLogOut;
@@ -39,12 +40,11 @@ public class HomeActivity extends AppCompatActivity {
 
         btnMenu = findViewById(R.id.btnMenu);
         cardMenuOptions = findViewById(R.id.cardMenuOptions);
+        optRegisterSale = findViewById(R.id.optRegisterSale);
+        optReprocess = findViewById(R.id.optReprocess);
         optLogOut = findViewById(R.id.optLogOut);
 
-
-
         configClick();
-
     }
 
     private void configClick(){
@@ -59,7 +59,9 @@ public class HomeActivity extends AppCompatActivity {
         optLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Botão de Log Out clicado.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

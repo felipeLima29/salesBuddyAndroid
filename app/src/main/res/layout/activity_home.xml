@@ -100,7 +100,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:visibility="gone"
-
+        android:backgroundTint="@color/whiteSmoke"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerContainer">
@@ -118,6 +118,7 @@
                 android:padding="10dp"
                 android:text="REGISTRAR VENDA"
                 android:textColor="@color/blue"
+                android:backgroundTint="@color/whiteSmoke"
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="14sp" />
 
@@ -130,6 +131,7 @@
                 android:padding="10dp"
                 android:text="REPROCESSAR"
                 android:textColor="@color/blue"
+                android:backgroundTint="@color/whiteSmoke"
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="14sp" />
 
@@ -142,6 +144,7 @@
                 android:padding="10dp"
                 android:text="LOG OUT"
                 android:textColor="@color/blue"
+                android:backgroundTint="@color/whiteSmoke"
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="14sp" />
         </LinearLayout>
