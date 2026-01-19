@@ -260,19 +260,37 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnAlter"
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/button_register_sale"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="ALTERAR"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnAlter"
+                    android:layout_width="130dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_add_item"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="ALTERAR"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button2"
+                    android:layout_width="190dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/button_register_sale"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="19sp"
+                    android:text="FINALIZAR" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
