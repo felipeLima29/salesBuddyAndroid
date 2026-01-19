@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
 
-public class ResumeSaleActivity extends AppCompatActivity {
+public class ResumeSaleActivity extends IncludeToolbar {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +22,8 @@ public class ResumeSaleActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        configToolbar("RESUMO VENDA");
+
     }
 }

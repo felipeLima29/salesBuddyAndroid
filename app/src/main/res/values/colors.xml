@@ -6,4 +6,5 @@
     <color name="blue">#074A82</color>
     <color name="pink">#A32C65</color>
     <color name="txInput">#C0CDD8</color>
+    <color name="txInputSale">#707070</color>
 </resources>
