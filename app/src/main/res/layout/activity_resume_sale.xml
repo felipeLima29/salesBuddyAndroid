@@ -289,7 +289,8 @@
                     android:layout_gravity="center"
                     android:textColor="@color/white"
                     android:textSize="19sp"
-                    android:text="FINALIZAR" />
+                    android:text="FINALIZAR"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
         </LinearLayout>
