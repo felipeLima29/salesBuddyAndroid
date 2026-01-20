@@ -1,5 +1,6 @@
 package com.example.salesbuddy.view.adapter;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
@@ -17,9 +19,10 @@ import java.util.List;
 public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder> {
 
     private List<ItemsSale> listItens;
-
-    public ResumeAdapter(List<ItemsSale> listItens) {
+    private int colorText;
+    public ResumeAdapter(List<ItemsSale> listItens, int colorText) {
         this.listItens = listItens;
+        this.colorText = colorText;
     }
 
     @NonNull
@@ -34,8 +37,13 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ItemsSale item = listItens.get(position);
         holder.tvItemDescription.setText(item.getDescription());
-        // Formata o número (01, 02...)
         holder.tvItemNum.setText(String.format("%02d", position + 1));
+
+        Context context = holder.itemView.getContext();
+        int colorFinal = ContextCompat.getColor(context, colorText);
+
+        holder.tvItemNum.setTextColor(colorFinal);
+        holder.tvItemDescription.setTextColor(colorFinal);
     }
 
     @Override

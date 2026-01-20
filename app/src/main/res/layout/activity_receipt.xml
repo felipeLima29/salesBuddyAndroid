@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="Nome"
-                    android:textColor="@color/txInput"
+                    android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="CPF"
-                    android:textColor="@color/txInput"
+                    android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +80,7 @@
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="000.000.000-00"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/txInputSale"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -92,7 +92,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="E-mail"
-                    android:textColor="@color/txInput"
+                    android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvShowName" />
@@ -104,7 +104,7 @@
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="josemariadasneves@gmail.com"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/txInputSale"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
@@ -114,7 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/pink"
+                    android:background="@color/txInputSale"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="Itm"
-                    android:textColor="@color/txInput"
+                    android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -146,7 +146,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="Descrição"
-                    android:textColor="@color/txInput"
+                    android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/guideline10"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -171,7 +171,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/pink"
+                    android:background="@color/txInputSale"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvItensVenda" /> ```
@@ -196,8 +196,8 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="R$ 57,00"
-                    android:textColor="@color/pink"
-                    android:textSize="10sp"
+                    android:textColor="@color/txInputSale"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -220,8 +220,8 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="R$ 56,30"
-                    android:textColor="@color/pink"
-                    android:textSize="10sp"
+                    android:textColor="@color/txInputSale"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvShowValueReceived" />
 
@@ -245,26 +245,29 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="R$ 00,70"
-                    android:textColor="@color/pink"
-                    android:textSize="10sp"
+                    android:textColor="@color/txInputSale"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvValueSale" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
+                android:layout_marginTop="70dp"
+                android:gravity="bottom|center"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnAlter"
-                    android:layout_width="140dp"
+                    android:layout_width="0dp"
                     android:layout_height="65dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/button_add_item"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_yes_receipt"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="SIM"
                     android:textAlignment="center"
@@ -274,13 +277,12 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button2"
-                    android:layout_width="180dp"
+                    android:layout_width="0dp"
                     android:layout_height="65dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/button_register_sale"
-                    android:fontFamily="@font/montserrat_bold"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_no_receipt"
                     android:text="NÃO"
-                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="19sp"
                     android:textStyle="bold" />

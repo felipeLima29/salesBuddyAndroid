@@ -1,9 +1,12 @@
 package com.example.salesbuddy.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResumeSaleActivity extends IncludeToolbar {
-
+    private AppCompatButton btnFinishSale;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,16 @@ public class ResumeSaleActivity extends IncludeToolbar {
             return insets;
         });
 
+        btnFinishSale = findViewById(R.id.btnFinishSale);
+
+        btnFinishSale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
+                startActivity(intent);
+            }
+        });
+
         configToolbar("RESUMO VENDA");
         List<ItemsSale> itemsSale = new ArrayList<>();
 
@@ -39,7 +52,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
         itemsSale.add(new ItemsSale("6,70", "Cabeça de bode"));
 
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
-        ResumeAdapter adapter = new ResumeAdapter(itemsSale);
+        ResumeAdapter adapter = new ResumeAdapter(itemsSale, R.color.blue);
 
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
