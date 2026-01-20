@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Nome"
-                android:textColor="@color/txInput"
+                android:textColor="@color/txInputSale"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="CPF"
-                android:textColor="@color/txInput"
+                android:textColor="@color/txInputSale"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline3"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,7 +92,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="E-mail"
-                android:textColor="@color/txInput"
+                android:textColor="@color/txInputSale"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvShowName" />
@@ -109,15 +109,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/pink"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvShowEmail" />
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/pink"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvShowEmail" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline10"
@@ -133,7 +134,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Itm"
-                android:textColor="@color/txInput"
+                android:textColor="@color/txInputSale"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -145,44 +146,36 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Descrição"
-                android:textColor="@color/txInput"
+                android:textColor="@color/txInputSale"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline10"
                 app:layout_constraintTop_toBottomOf="@+id/view" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="01"
-                android:textColor="@color/blue"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Bolacha Maria"
-                android:textColor="@color/blue"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline10"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/pink"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvItensVenda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/view2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:listitem="@layout/iten_resume_sale"
+                    tools:itemCount="4"/>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/pink"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvItensVenda" /> ```
+
 
             <TextView
                 android:id="@+id/textView12"
@@ -260,18 +253,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnAlter"
-                    android:layout_width="130dp"
-                    android:layout_height="60dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_gravity="center"
+                    android:layout_width="140dp"
+                    android:layout_height="65dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/button_add_item"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="ALTERAR"
@@ -282,15 +274,17 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button2"
-                    android:layout_width="190dp"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="180dp"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/button_register_sale"
-                    android:layout_gravity="center"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="FINALIZAR"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="19sp"
-                    android:text="FINALIZAR"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
         </LinearLayout>

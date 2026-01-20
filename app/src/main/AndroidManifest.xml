@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SalesBuddy">
         <activity
+            android:name=".view.ReceiptActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ResumeSaleActivity"
             android:exported="false" />
         <activity
