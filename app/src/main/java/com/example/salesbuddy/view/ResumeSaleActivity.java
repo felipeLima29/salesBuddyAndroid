@@ -28,6 +28,7 @@ import retrofit2.Response;
 
 public class ResumeSaleActivity extends IncludeToolbar {
     private AppCompatButton btnFinishSale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,6 @@ public class ResumeSaleActivity extends IncludeToolbar {
         });
 
         btnFinishSale = findViewById(R.id.btnFinishSale);
-
 
 
         btnFinishSale.setOnClickListener(new View.OnClickListener() {
@@ -66,25 +66,26 @@ public class ResumeSaleActivity extends IncludeToolbar {
 
     }
 
-    private void getApiSale(){
+    private void getApiSale() {
         ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
         Call<List<Sales>> configCall = api.getSales();
 
         configCall.enqueue(new Callback<List<Sales>>() {
             @Override
             public void onResponse(Call<List<Sales>> call, Response<List<Sales>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     List<Sales> list = response.body();
-
-                    Log.d("LIST", "onResponse: " + list);
+                    Log.d("LIST", "Nome: " + list.get(0).getName() + " " +
+                                " | Valor: " + list.get(0).getValueSale() + " " +
+                                " | Descrição: " + list.get(0).getDescription());
                 } else {
-                    Log.e("ERRO", "erro" );
+                    Log.e("ERRO", "erro");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Sales>> call, Throwable t) {
-                Log.e("ERRO", "erro" );
+                Log.e("ERRO", "erro");
             }
         });
     }
