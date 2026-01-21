@@ -16,7 +16,7 @@
         android:paddingLeft="35dp"
         android:paddingTop="120dp"
         android:paddingRight="35dp"
-        android:paddingBottom="120dp"
+        android:paddingBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,10 +32,10 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_register_sales"
                 android:orientation="vertical"
+                android:paddingLeft="15dp"
                 android:paddingTop="15dp"
                 android:paddingRight="15dp"
-                android:paddingBottom="100dp"
-                android:paddingLeft="15dp">
+                android:paddingBottom="100dp">
 
                 <EditText
                     android:id="@+id/txClientName"
@@ -43,12 +43,12 @@
                     android:layout_height="115px"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/border_edit_text"
-                    android:textColorHint="@color/txInput"
-                    android:fontFamily="@font/montserrat_regular"
                     android:ems="10"
+                    android:fontFamily="@font/montserrat_regular"
                     android:hint="NOME CLIENTE"
                     android:inputType="text"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="20dp"
+                    android:textColorHint="@color/txInput" />
 
                 <EditText
                     android:id="@+id/txCpf"
@@ -56,12 +56,12 @@
                     android:layout_height="115px"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/border_edit_text"
-                    android:textColorHint="@color/txInput"
-                    android:fontFamily="@font/montserrat_regular"
                     android:ems="10"
+                    android:fontFamily="@font/montserrat_regular"
                     android:hint="CPF"
                     android:inputType="text"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="20dp"
+                    android:textColorHint="@color/txInput" />
 
                 <EditText
                     android:id="@+id/txEmail"
@@ -69,12 +69,12 @@
                     android:layout_height="115px"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/border_edit_text"
-                    android:textColorHint="@color/txInput"
-                    android:fontFamily="@font/montserrat_regular"
                     android:ems="10"
+                    android:fontFamily="@font/montserrat_regular"
                     android:hint="E-MAIL"
                     android:inputType="text"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="20dp"
+                    android:textColorHint="@color/txInput" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -87,25 +87,25 @@
                         android:id="@+id/txItemName"
                         android:layout_width="0dp"
                         android:layout_height="115px"
-                        android:layout_weight="1"
                         android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/border_edit_text"
-                        android:textColorHint="@color/txInput"
-                        android:fontFamily="@font/montserrat_regular"
                         android:ems="10"
+                        android:fontFamily="@font/montserrat_regular"
                         android:hint="ITEM 01"
                         android:inputType="text"
-                        android:paddingLeft="20dp" />
+                        android:paddingLeft="20dp"
+                        android:textColorHint="@color/txInput" />
 
                     <ImageButton
                         android:id="@+id/btnAddItem"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:background="@drawable/button_add_item"
-                        android:src="@drawable/ic_add_item"
-                        android:scaleType="fitCenter"
-                        android:padding="8dp"
                         android:gravity="center"
+                        android:padding="8dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_add_item"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -118,12 +118,12 @@
                     android:layout_height="115px"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/border_edit_text"
-                    android:textColorHint="@color/txInput"
-                    android:fontFamily="@font/montserrat_regular"
                     android:ems="10"
+                    android:fontFamily="@font/montserrat_regular"
                     android:hint="VALOR VENDA"
                     android:inputType="text"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="20dp"
+                    android:textColorHint="@color/txInput" />
 
                 <EditText
                     android:id="@+id/txReceivedValue"
@@ -131,12 +131,12 @@
                     android:layout_height="115px"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/border_edit_text"
-                    android:textColorHint="@color/txInput"
-                    android:fontFamily="@font/montserrat_regular"
                     android:ems="10"
+                    android:fontFamily="@font/montserrat_regular"
                     android:hint="VALOR RECEBIDO"
                     android:inputType="text"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="20dp"
+                    android:textColorHint="@color/txInput" />
 
                 <LinearLayout
                     android:id="@+id/containerProdutos"
@@ -154,7 +154,7 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="50dp"
-                android:layout_marginBottom="20dp"
+                android:layout_weight="0"
                 android:background="@drawable/button_register_sale"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="IR PARA RESUMO"
