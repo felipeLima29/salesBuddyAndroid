@@ -19,8 +19,9 @@ import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
-import com.example.salesbuddy.model.Sales;
+import com.example.salesbuddy.model.request.Sales;
 import com.example.salesbuddy.model.api.ApiService;
+import com.example.salesbuddy.model.request.SalesResponse;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
     private TextView tvShowEmail;
     private TextView tvShowValueReceived;
     private TextView tvValueSale;
+    private TextView tvDueChange;
     private ResumeAdapter adapter;
     private List<ItemsSale> itemsSale = new ArrayList<>();
 
@@ -58,6 +60,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
         tvShowEmail = findViewById(R.id.tvEmailReceipt);
         tvShowValueReceived = findViewById(R.id.tvValueReceivedReceipt);
         tvValueSale = findViewById(R.id.tvValueSaleReceipt);
+        tvDueChange = findViewById(R.id.tvDueChange);
 
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
         adapter = new ResumeAdapter(itemsSale, R.color.blue);
@@ -69,38 +72,38 @@ public class ResumeSaleActivity extends IncludeToolbar {
         btnFinishSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getApiSale();
-                Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
+                /*Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
                 intent.putExtra("saleData", saleDataReceived);
-                startActivity(intent);
+                startActivity(intent);*/
+                insertSale();
             }
         });
 
         configToolbar("RESUMO VENDA");
     }
 
-    private void getApiSale() {
+    private void insertSale() {
         ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
-        Call<List<Sales>> configCall = api.getSales();
+        Call<SalesResponse> insertSaleCall = api.insertSale(saleDataReceived);
 
-        configCall.enqueue(new Callback<List<Sales>>() {
+        insertSaleCall.enqueue(new Callback<SalesResponse>() {
             @Override
-            public void onResponse(Call<List<Sales>> call, Response<List<Sales>> response) {
+            public void onResponse(Call<SalesResponse> call, Response<SalesResponse> response) {
+                SalesResponse salesResponse = response.body();
                 if (response.isSuccessful()) {
-                    List<Sales> list = response.body();
-                    Toast.makeText(ResumeSaleActivity.this, "Nome: " + list.get(0).getName() + "" +
-                            " | Valor: " + list.get(0).getValueSale() + " " +
-                            " | Descrição: " + list.get(0).getDescription(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ResumeSaleActivity.this, salesResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("INFO", "onResponse: " + salesResponse.getMessage());
                 } else {
-                    Log.e("ERRO", "erro");
+                    Log.e("ERROR", "Erro: ");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Sales>> call, Throwable t) {
-                Log.e("ERRO", "erro");
+            public void onFailure(Call<SalesResponse> call, Throwable t) {
+                Log.e("ERROR", "Erro: ");
             }
         });
+
     }
 
     private void getDataSale() {
@@ -115,15 +118,21 @@ public class ResumeSaleActivity extends IncludeToolbar {
             tvShowCpf.setText(saleDataReceived.getCpf());
             tvShowEmail.setText(saleDataReceived.getEmail());
 
-            tvShowValueReceived.setText(saleDataReceived.getReceivedValue());
-            tvValueSale.setText(saleDataReceived.getSaleValue());
+            String getValueReceived = String.valueOf(saleDataReceived.getValueReceived()).toString();
+            String getValueSale = String.valueOf(saleDataReceived.getValueSale()).toString();
+            String getChangeDue = String.valueOf(saleDataReceived.getChangeDue()).toString();
+
+            tvShowValueReceived.setText(getValueReceived);
+            tvValueSale.setText(getValueSale);
+            tvDueChange.setText(getChangeDue);
+            Log.d("TEXT", "getDataSale: " + saleDataReceived.getQtdItems());
 
             String listItems = saleDataReceived.getDescription();
 
             if (listItems != null || listItems.isEmpty()) {
                 String[] items = listItems.split("#");
 
-                for (String nameItem : items){
+                for (String nameItem : items) {
                     ItemsSale itemForList = new ItemsSale(
                             "R$ --",
                             nameItem.trim()
@@ -133,7 +142,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
                 }
 
             } else {
-                Log.e("INFO", "Erro: Objeto veio nul" );
+                Log.e("INFO", "Erro: Objeto veio nul");
             }
 
             adapter.notifyDataSetChanged();

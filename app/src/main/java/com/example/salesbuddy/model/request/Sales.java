@@ -1,4 +1,4 @@
-package com.example.salesbuddy.model;
+package com.example.salesbuddy.model.request;
 
 public class Sales {
     private String name;

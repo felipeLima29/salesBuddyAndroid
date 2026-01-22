@@ -91,14 +91,23 @@ public class RegisterSalesActivity extends IncludeToolbar {
         String name = txClientName.getText().toString();
         String cpf = txCpf.getText().toString();
         String email = txEmail.getText().toString();
-        String saleValue = txSaleValue.getText().toString();
-        String receivedValue = txReceivedValue.getText().toString();
+        String valueSaleString = txSaleValue.getText().toString();
+        String valueReceivedString = txReceivedValue.getText().toString();
 
-        // 1. Pega o primeiro item (que é fixo)
+        double valueSale = Double.parseDouble(valueSaleString);
+        double valueReceived = Double.parseDouble(valueReceivedString);
+        double changeDue = valueReceived - valueSale;
+
+        int qtdItems = 0;
         StringBuilder allDescriptions = new StringBuilder();
-        allDescriptions.append(txItemName.getText().toString());
 
-        // 2. Loop para pegar os itens dinâmicos do container
+        String textFix = txItemName.getText().toString().trim();
+        if (!textFix.isEmpty()) {
+            allDescriptions.append(textFix);
+            qtdItems++;
+        }
+
+        // Loop para pegar os itens dinâmicos do container
         for (int i = 0; i < containerProducts.getChildCount(); i++) {
             View dynamicRow = containerProducts.getChildAt(i);
             EditText etDynamic = dynamicRow.findViewById(R.id.etDynamicItem);
@@ -106,14 +115,13 @@ public class RegisterSalesActivity extends IncludeToolbar {
             String text = etDynamic.getText().toString().trim();
             if (!text.isEmpty()) {
                 allDescriptions.append("# ").append(text);
+                qtdItems++;
             }
         }
 
         String finalDescription = allDescriptions.toString();
 
-        Log.d("TEXT_READ", "Itens: " + finalDescription);
-
-        SaleSerializable saleSerializable = new SaleSerializable(name, cpf, email, finalDescription, saleValue, receivedValue);
+        SaleSerializable saleSerializable = new SaleSerializable(name, cpf, email, finalDescription, qtdItems, valueSale, valueReceived, changeDue);
         Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
         intent.putExtra("saleData", saleSerializable);
         startActivity(intent);

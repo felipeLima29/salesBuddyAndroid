@@ -46,7 +46,7 @@ public class ReceiptActivity extends IncludeToolbar {
         tvEmailReceipt = findViewById(R.id.tvEmailReceipt);
         tvValueReceivedReceipt = findViewById(R.id.tvValueReceivedReceipt);
         tvValueSaleReceipt = findViewById(R.id.tvValueSaleReceipt);
-        tvDueChangeReceipt = findViewById(R.id.tvDueChangeReceipt);
+        tvDueChangeReceipt = findViewById(R.id.tvDueChange);
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
 
         adapter = new ResumeAdapter(itemsSale, R.color.txInputSale);
@@ -70,8 +70,8 @@ public class ReceiptActivity extends IncludeToolbar {
             tvNameReceipt.setText(saleDataReceived.getName());
             tvCpfReceipt.setText(saleDataReceived.getCpf());
             tvEmailReceipt.setText(saleDataReceived.getEmail());
-            tvValueReceivedReceipt.setText(saleDataReceived.getReceivedValue());
-            tvValueSaleReceipt.setText(saleDataReceived.getSaleValue());
+            /*tvValueReceivedReceipt.setText(saleDataReceived.getReceivedValue());
+            tvValueSaleReceipt.setText(saleDataReceived.getSaleValue());*/
 
             String listItems = saleDataReceived.getDescription();
             if (listItems != null || listItems.isEmpty()) {
