@@ -43,7 +43,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         int colorFinal = ContextCompat.getColor(context, colorText);
 
         holder.tvItemNum.setTextColor(colorFinal);
-        //holder.tvItemDescription.setTextColor(colorFinal);
+        holder.tvItemDescription.setTextColor(colorFinal);
     }
 
     @Override
@@ -52,14 +52,11 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        // Aqui declaramos os componentes do iten_resume_sale.xml
         TextView tvItemNum;
         TextView tvItemDescription;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Aqui vinculamos os IDs
             tvItemNum = itemView.findViewById(R.id.tvItemNum);
             tvItemDescription = itemView.findViewById(R.id.tvItemDescription);
         }

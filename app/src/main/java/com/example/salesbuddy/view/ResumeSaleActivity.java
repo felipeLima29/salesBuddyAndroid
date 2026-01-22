@@ -23,7 +23,6 @@ import com.example.salesbuddy.model.Sales;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResumeSaleActivity extends IncludeToolbar {
+    private SaleSerializable saleDataReceived;
     private AppCompatButton btnFinishSale;
     private TextView tvShowName;
     private TextView tvShowCpf;
@@ -53,11 +53,11 @@ public class ResumeSaleActivity extends IncludeToolbar {
         });
 
         btnFinishSale = findViewById(R.id.btnFinishSale);
-        tvShowName = findViewById(R.id.tvShowName);
-        tvShowCpf = findViewById(R.id.tvShowCpf);
-        tvShowEmail = findViewById(R.id.tvShowEmail);
-        tvShowValueReceived = findViewById(R.id.tvShowValueReceived);
-        tvValueSale = findViewById(R.id.tvValueSale);
+        tvShowName = findViewById(R.id.tvNameReceipt);
+        tvShowCpf = findViewById(R.id.tvCpfReceipt);
+        tvShowEmail = findViewById(R.id.tvEmailReceipt);
+        tvShowValueReceived = findViewById(R.id.tvValueReceivedReceipt);
+        tvValueSale = findViewById(R.id.tvValueSaleReceipt);
 
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
         adapter = new ResumeAdapter(itemsSale, R.color.blue);
@@ -66,7 +66,15 @@ public class ResumeSaleActivity extends IncludeToolbar {
 
         getDataSale();
 
-        btnFinishSale.setOnClickListener(v -> getApiSale());
+        btnFinishSale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getApiSale();
+                Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
+                intent.putExtra("saleData", saleDataReceived);
+                startActivity(intent);
+            }
+        });
 
         configToolbar("RESUMO VENDA");
     }
@@ -96,7 +104,6 @@ public class ResumeSaleActivity extends IncludeToolbar {
     }
 
     private void getDataSale(){
-        SaleSerializable saleDataReceived;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
         } else {

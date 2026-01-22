@@ -28,8 +28,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_marginHorizontal="35dp"
+                android:layout_weight="1"
                 android:background="@drawable/background_register_sales"
                 android:padding="20dp">
 
@@ -45,7 +45,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tvShowName"
+                    android:id="@+id/tvNameReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -75,7 +75,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tvShowCpf"
+                    android:id="@+id/tvCpfReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -96,10 +96,10 @@
                     android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvShowName" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvNameReceipt" />
 
                 <TextView
-                    android:id="@+id/tvShowEmail"
+                    android:id="@+id/tvEmailReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -118,7 +118,7 @@
                     android:background="@color/txInputSale"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvShowEmail" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmailReceipt" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline10"
@@ -160,7 +160,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView9"
-                    tools:itemCount="4"
+                    tools:itemCount="1"
                     tools:listitem="@layout/iten_resume_sale" />
 
                 <View
@@ -186,7 +186,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
 
                 <TextView
-                    android:id="@+id/tvShowValueReceived"
+                    android:id="@+id/tvValueReceivedReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -210,7 +210,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
                 <TextView
-                    android:id="@+id/tvValueSale"
+                    android:id="@+id/tvValueSaleReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -219,23 +219,22 @@
                     android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvShowValueReceived" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvValueReceivedReceipt" />
 
                 <TextView
                     android:id="@+id/textView14"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="Troco Devido"
                     android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
                 <TextView
-                    android:id="@+id/textView17"
+                    android:id="@+id/tvDueChangeReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -244,8 +243,7 @@
                     android:textColor="@color/txInputSale"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvValueSale" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvValueSaleReceipt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -259,9 +257,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="15dp"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="15dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="0dp"
@@ -273,11 +271,11 @@
                         android:id="@+id/tvComprovante"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ENVIAR COMPROVANTE PARA CLIENTE?"
+                        android:layout_marginHorizontal="15dp"
                         android:fontFamily="@font/montserrat_semibold"
+                        android:text="ENVIAR COMPROVANTE PARA CLIENTE?"
                         android:textColor="@color/blue"
-                        android:textSize="16sp"
-                        android:layout_marginHorizontal="15dp"/>
+                        android:textSize="16sp" />
 
                     <View
                         android:layout_width="0dp"

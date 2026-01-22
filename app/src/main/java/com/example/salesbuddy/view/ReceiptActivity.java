@@ -1,12 +1,10 @@
 package com.example.salesbuddy.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,14 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
+import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReceiptActivity extends IncludeToolbar {
-
-    private TextView tvShowName;
+    private TextView tvNameReceipt;
+    private TextView tvCpfReceipt;
+    private TextView tvEmailReceipt;
+    private TextView tvValueReceivedReceipt;
+    private TextView tvValueSaleReceipt;
+    private TextView tvDueChangeReceipt;
+    private ResumeAdapter adapter;
+    private SaleSerializable saleDataReceived;
+    private List<ItemsSale> itemsSale = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +41,48 @@ public class ReceiptActivity extends IncludeToolbar {
             return insets;
         });
 
-        tvShowName = findViewById(R.id.tvShowName);
-
+        tvNameReceipt = findViewById(R.id.tvNameReceipt);
+        tvCpfReceipt = findViewById(R.id.tvCpfReceipt);
+        tvEmailReceipt = findViewById(R.id.tvEmailReceipt);
+        tvValueReceivedReceipt = findViewById(R.id.tvValueReceivedReceipt);
+        tvValueSaleReceipt = findViewById(R.id.tvValueSaleReceipt);
+        tvDueChangeReceipt = findViewById(R.id.tvDueChangeReceipt);
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
 
-        configToolbar("COMPROVANTE");
-
-        List<ItemsSale> itemsSale = new ArrayList<>();
-
-        itemsSale.add(new ItemsSale("3,50", "Bolacha Maria"));
-        itemsSale.add(new ItemsSale("10,50", "Calabresa Perdigão bem salgadinha"));
-        itemsSale.add(new ItemsSale("29,50", "Computador"));
-        itemsSale.add(new ItemsSale("6,70", "Cabeça de bode"));
-
-        ResumeAdapter adapter = new ResumeAdapter(itemsSale, R.color.txInputSale);
-
+        adapter = new ResumeAdapter(itemsSale, R.color.txInputSale);
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
+
+        getDataSale();
+
+
+        configToolbar("COMPROVANTE");
+    }
+
+    private void getDataSale(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
+        } else {
+            saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
+        }
+
+        if (saleDataReceived != null){
+            tvNameReceipt.setText(saleDataReceived.getName());
+            tvCpfReceipt.setText(saleDataReceived.getCpf());
+            tvEmailReceipt.setText(saleDataReceived.getEmail());
+            tvValueReceivedReceipt.setText(saleDataReceived.getReceivedValue());
+            tvValueSaleReceipt.setText(saleDataReceived.getSaleValue());
+
+            ItemsSale itemsOfSale = new ItemsSale(
+                    saleDataReceived.getSaleValue(),
+                    saleDataReceived.getDescription()
+            );
+
+            itemsSale.add(itemsOfSale);
+            adapter.notifyDataSetChanged();
+        }else{
+            Log.d("DEBUG_LISTA", "Erro" );
+        }
+
     }
 }
