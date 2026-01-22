@@ -1,6 +1,9 @@
 package com.example.salesbuddy.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,8 @@ import java.util.List;
 
 public class ReceiptActivity extends IncludeToolbar {
 
+    private TextView tvShowName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,8 @@ public class ReceiptActivity extends IncludeToolbar {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        tvShowName = findViewById(R.id.tvShowName);
 
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
 

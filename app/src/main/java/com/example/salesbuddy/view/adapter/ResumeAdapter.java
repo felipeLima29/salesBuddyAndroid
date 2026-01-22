@@ -43,7 +43,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         int colorFinal = ContextCompat.getColor(context, colorText);
 
         holder.tvItemNum.setTextColor(colorFinal);
-        holder.tvItemDescription.setTextColor(colorFinal);
+        //holder.tvItemDescription.setTextColor(colorFinal);
     }
 
     @Override
