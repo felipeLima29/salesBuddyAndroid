@@ -3,8 +3,12 @@ package com.example.salesbuddy.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.widget.AppCompatButton;
@@ -18,12 +22,11 @@ import com.example.salesbuddy.model.SaleSerializable;
 public class RegisterSalesActivity extends IncludeToolbar {
 
     private AppCompatButton btnRegister;
-    private EditText txClientName;
-    private EditText txCpf;
-    private EditText txEmail;
-    private EditText txItemName;
-    private EditText txSaleValue;
-    private EditText txReceivedValue;
+    private ImageButton btnAddItem;
+    private LinearLayout containerProducts;
+    private EditText txClientName, txCpf, txEmail, txItemName, txSaleValue, txReceivedValue;
+    private int itemCount = 1;
+    private final int MAX_ITEMS = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,29 +47,75 @@ public class RegisterSalesActivity extends IncludeToolbar {
         txSaleValue = findViewById(R.id.txSaleValue);
         txReceivedValue = findViewById(R.id.txReceivedValue);
         btnRegister = findViewById(R.id.btnRegiSter);
+        btnAddItem = findViewById(R.id.btnAddItem);
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        containerProducts = findViewById(R.id.containerProducts);
 
-                String name = txClientName.getText().toString();
-                String cpf = txCpf.getText().toString();
-                String email = txEmail.getText().toString();
-                String description = txItemName.getText().toString();
-                String saleValue = txSaleValue.getText().toString();
-                String receivedValue = txReceivedValue.getText().toString();
-                Log.d("TEXT_READ", "onClick: " + name + " | " + cpf + " | " + email + description + saleValue + receivedValue);
-
-                SaleSerializable saleSerializable = new SaleSerializable(name, cpf, email, description, saleValue, receivedValue);
-                Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
-                intent.putExtra("saleData", saleSerializable);
-                startActivity(intent);
-            }
-        });
-
+        btnAddItem.setOnClickListener(v -> addNewItemInput());
+        btnRegister.setOnClickListener(v -> registerSale());
 
         configToolbar("REGISTRAR VENDA");
-
     }
 
+    private void addNewItemInput() {
+        if (itemCount >= MAX_ITEMS) {
+            Toast.makeText(this, "Máximo de 4 itens atingido!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        View view = LayoutInflater.from(this).inflate(R.layout.item_dynamic_sale, containerProducts, false);
+
+        // Configura o botão de remover
+        ImageButton btnRemove = view.findViewById(R.id.btnRemoveItem);
+        EditText etItem = view.findViewById(R.id.etDynamicItem);
+
+        // Define o hint
+        itemCount++;
+        etItem.setHint("ITEM 0" + itemCount);
+
+        btnRemove.setOnClickListener(v -> {
+            removeView(view);
+        });
+
+        // Adiciona na tela
+        containerProducts.addView(view);
+    }
+
+    private void removeView(View view) {
+        containerProducts.removeView(view);
+        itemCount--;
+        Toast.makeText(this, "Item removido", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void registerSale() {
+        String name = txClientName.getText().toString();
+        String cpf = txCpf.getText().toString();
+        String email = txEmail.getText().toString();
+        String saleValue = txSaleValue.getText().toString();
+        String receivedValue = txReceivedValue.getText().toString();
+
+        // 1. Pega o primeiro item (que é fixo)
+        StringBuilder allDescriptions = new StringBuilder();
+        allDescriptions.append(txItemName.getText().toString());
+
+        // 2. Loop para pegar os itens dinâmicos do container
+        for (int i = 0; i < containerProducts.getChildCount(); i++) {
+            View dynamicRow = containerProducts.getChildAt(i);
+            EditText etDynamic = dynamicRow.findViewById(R.id.etDynamicItem);
+
+            String text = etDynamic.getText().toString().trim();
+            if (!text.isEmpty()) {
+                allDescriptions.append("# ").append(text);
+            }
+        }
+
+        String finalDescription = allDescriptions.toString();
+
+        Log.d("TEXT_READ", "Itens: " + finalDescription);
+
+        SaleSerializable saleSerializable = new SaleSerializable(name, cpf, email, finalDescription, saleValue, receivedValue);
+        Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
+        intent.putExtra("saleData", saleSerializable);
+        startActivity(intent);
+    }
 }

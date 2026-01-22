@@ -89,8 +89,8 @@ public class ResumeSaleActivity extends IncludeToolbar {
                 if (response.isSuccessful()) {
                     List<Sales> list = response.body();
                     Toast.makeText(ResumeSaleActivity.this, "Nome: " + list.get(0).getName() + "" +
-                                   " | Valor: " + list.get(0).getValueSale() + " " +
-                                   " | Descrição: " + list.get(0).getDescription(), Toast.LENGTH_LONG).show();
+                            " | Valor: " + list.get(0).getValueSale() + " " +
+                            " | Descrição: " + list.get(0).getDescription(), Toast.LENGTH_LONG).show();
                 } else {
                     Log.e("ERRO", "erro");
                 }
@@ -103,29 +103,42 @@ public class ResumeSaleActivity extends IncludeToolbar {
         });
     }
 
-    private void getDataSale(){
+    private void getDataSale() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
         } else {
             saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
         }
 
-        if (saleDataReceived != null){
+        if (saleDataReceived != null) {
             tvShowName.setText(saleDataReceived.getName());
             tvShowCpf.setText(saleDataReceived.getCpf());
             tvShowEmail.setText(saleDataReceived.getEmail());
+
             tvShowValueReceived.setText(saleDataReceived.getReceivedValue());
             tvValueSale.setText(saleDataReceived.getSaleValue());
 
-            ItemsSale itemsOfSale = new ItemsSale(
-                    saleDataReceived.getSaleValue(),
-                    saleDataReceived.getDescription()
-            );
+            String listItems = saleDataReceived.getDescription();
 
-            itemsSale.add(itemsOfSale);
+            if (listItems != null || listItems.isEmpty()) {
+                String[] items = listItems.split("#");
+
+                for (String nameItem : items){
+                    ItemsSale itemForList = new ItemsSale(
+                            "R$ --",
+                            nameItem.trim()
+                    );
+
+                    itemsSale.add(itemForList);
+                }
+
+            } else {
+                Log.e("INFO", "Erro: Objeto veio nul" );
+            }
+
             adapter.notifyDataSetChanged();
-        }else{
-            Log.d("DEBUG_LISTA", "Erro" );
+        } else {
+            Log.d("DEBUG_LISTA", "Erro");
         }
 
     }

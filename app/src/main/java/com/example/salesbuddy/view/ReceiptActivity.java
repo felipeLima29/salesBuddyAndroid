@@ -59,30 +59,38 @@ public class ReceiptActivity extends IncludeToolbar {
         configToolbar("COMPROVANTE");
     }
 
-    private void getDataSale(){
+    private void getDataSale() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
         } else {
             saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
         }
 
-        if (saleDataReceived != null){
+        if (saleDataReceived != null) {
             tvNameReceipt.setText(saleDataReceived.getName());
             tvCpfReceipt.setText(saleDataReceived.getCpf());
             tvEmailReceipt.setText(saleDataReceived.getEmail());
             tvValueReceivedReceipt.setText(saleDataReceived.getReceivedValue());
             tvValueSaleReceipt.setText(saleDataReceived.getSaleValue());
 
-            ItemsSale itemsOfSale = new ItemsSale(
-                    saleDataReceived.getSaleValue(),
-                    saleDataReceived.getDescription()
-            );
+            String listItems = saleDataReceived.getDescription();
+            if (listItems != null || listItems.isEmpty()) {
+                String[] items = listItems.split("#");
 
-            itemsSale.add(itemsOfSale);
-            adapter.notifyDataSetChanged();
-        }else{
-            Log.d("DEBUG_LISTA", "Erro" );
+                for (String nameItem : items) {
+                    ItemsSale itemsForList = new ItemsSale(
+                            "R$ --",
+                            nameItem.trim()
+                    );
+
+                    itemsSale.add(itemsForList);
+                }
+
+                adapter.notifyDataSetChanged();
+            } else {
+                Log.d("DEBUG_LISTA", "Erro");
+            }
+
         }
-
     }
 }

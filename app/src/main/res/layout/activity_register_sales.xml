@@ -112,6 +112,13 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/containerProducts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical" />
+
                 <EditText
                     android:id="@+id/txSaleValue"
                     android:layout_width="match_parent"
@@ -138,12 +145,6 @@
                     android:paddingLeft="20dp"
                     android:textColorHint="@color/txInput" />
 
-                <LinearLayout
-                    android:id="@+id/containerProdutos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
-                    android:orientation="vertical" />
 
             </LinearLayout>
 
