@@ -9,4 +9,7 @@
     <color name="txInputSale">#707070</color>
     <color name="btnYes">#408140</color>
     <color name="btnNo">#A32C2C</color>
+    <color name="error">#FF0000</color>
+    <color name="sucess">#008000</color>
+    <color name="warning">#FFFF00</color>
 </resources>

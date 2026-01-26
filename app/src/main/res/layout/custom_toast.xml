@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_root"
+    android:orientation="horizontal"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="12dp"
+    android:background="@drawable/bg_toast_rounded"
+    android:gravity="center_vertical|center_horizontal"
+    android:layout_gravity="center"
+    android:minWidth="280dp">
+
+    <!-- Texto do toast -->
+    <TextView
+        android:id="@+id/toast_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TEXTO"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:layout_marginEnd="12dp" />
+
+    <!-- Ícone de sucesso -->
+    <ImageView
+        android:id="@+id/toast_icon"
+        android:layout_width="26dp"
+        android:layout_height="26dp" />
+
+</LinearLayout>

@@ -84,7 +84,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
 
     private void insertSale() {
         ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
-        Call<SalesResponse> insertSaleCall = api.insertSale(saleDataReceived);
+        /*Call<SalesResponse> insertSaleCall = api.insertSale(saleDataReceived);
 
         insertSaleCall.enqueue(new Callback<SalesResponse>() {
             @Override
@@ -102,7 +102,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
             public void onFailure(Call<SalesResponse> call, Throwable t) {
                 Log.e("ERROR", "Erro: ");
             }
-        });
+        });*/
 
     }
 
