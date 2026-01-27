@@ -19,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.SaleSerializable;
 
+import java.math.BigDecimal;
+
 public class RegisterSalesActivity extends IncludeToolbar {
 
     private AppCompatButton btnRegister;
@@ -94,9 +96,9 @@ public class RegisterSalesActivity extends IncludeToolbar {
         String valueSaleString = txSaleValue.getText().toString();
         String valueReceivedString = txReceivedValue.getText().toString();
 
-        double valueSale = Double.parseDouble(valueSaleString);
-        double valueReceived = Double.parseDouble(valueReceivedString);
-        double changeDue = valueReceived - valueSale;
+        BigDecimal valueSale = new BigDecimal(valueSaleString);
+        BigDecimal valueReceived = new BigDecimal(valueReceivedString);
+        BigDecimal changeDue = valueReceived.subtract(valueSale);
 
         int qtdItems = 0;
         StringBuilder allDescriptions = new StringBuilder();
@@ -121,7 +123,11 @@ public class RegisterSalesActivity extends IncludeToolbar {
 
         String finalDescription = allDescriptions.toString();
 
-        SaleSerializable saleSerializable = new SaleSerializable(name, cpf, email, finalDescription, qtdItems, valueSale, valueReceived, changeDue);
+        SaleSerializable saleSerializable = new SaleSerializable(name,
+                cpf, email,
+                finalDescription,
+                qtdItems, valueSale,
+                valueReceived, changeDue);
         Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
         intent.putExtra("saleData", saleSerializable);
         startActivity(intent);

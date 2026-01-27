@@ -22,7 +22,11 @@ import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.model.request.Sales;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.SalesResponse;
+import com.example.salesbuddy.utils.SharedPreferencesUtil;
+import com.example.salesbuddy.utils.ShowCustomToast;
+import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,9 +76,6 @@ public class ResumeSaleActivity extends IncludeToolbar {
         btnFinishSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
-                intent.putExtra("saleData", saleDataReceived);
-                startActivity(intent);*/
                 insertSale();
             }
         });
@@ -83,26 +84,43 @@ public class ResumeSaleActivity extends IncludeToolbar {
     }
 
     private void insertSale() {
+        SharedPreferencesUtil sp = SharedPreferencesUtil.instance(getApplicationContext());
         ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
-        /*Call<SalesResponse> insertSaleCall = api.insertSale(saleDataReceived);
+        String getToken = sp.fetchValueString(StaticsKeysUtil.Token);
+        String auth = "Bearer " + getToken;
+        Call<SalesResponse> insertSaleCall = api.insertSale(saleDataReceived, auth);
 
         insertSaleCall.enqueue(new Callback<SalesResponse>() {
             @Override
             public void onResponse(Call<SalesResponse> call, Response<SalesResponse> response) {
                 SalesResponse salesResponse = response.body();
-                if (response.isSuccessful()) {
-                    Toast.makeText(ResumeSaleActivity.this, salesResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d("INFO", "onResponse: " + salesResponse.getMessage());
+                if(response.isSuccessful()){
+                    ShowCustomToast.show(getApplicationContext(), salesResponse.getMessage(), "SUCESS");
+                    Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
+                    startActivity(intent);
                 } else {
-                    Log.e("ERROR", "Erro: ");
+                    try {
+                        Gson gson = new Gson();
+                        SalesResponse errorData = gson.fromJson(response.errorBody().charStream(),
+                                SalesResponse.class);
+
+                        String getMessage = errorData.getMessage();
+                        ShowCustomToast.show(ResumeSaleActivity.this, getMessage, "ERROR");
+                    } catch (Exception e) {
+                        ShowCustomToast.show(getApplicationContext(), "Erro no servidor", "ERROR");
+                        e.printStackTrace();
+                    }
+
                 }
             }
 
             @Override
             public void onFailure(Call<SalesResponse> call, Throwable t) {
-                Log.e("ERROR", "Erro: ");
+                ShowCustomToast.show(getApplicationContext(),
+                        "Erro ao acessar o servidor, tente novamente.",
+                        "ERROR");
             }
-        });*/
+        });
 
     }
 
@@ -125,8 +143,6 @@ public class ResumeSaleActivity extends IncludeToolbar {
             tvShowValueReceived.setText(getValueReceived);
             tvValueSale.setText(getValueSale);
             tvDueChange.setText(getChangeDue);
-            Log.d("TEXT", "getDataSale: " + saleDataReceived.getQtdItems());
-
             String listItems = saleDataReceived.getDescription();
 
             if (listItems != null || listItems.isEmpty()) {
@@ -149,6 +165,5 @@ public class ResumeSaleActivity extends IncludeToolbar {
         } else {
             Log.d("DEBUG_LISTA", "Erro");
         }
-
     }
 }

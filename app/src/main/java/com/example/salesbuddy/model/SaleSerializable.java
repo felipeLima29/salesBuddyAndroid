@@ -1,6 +1,7 @@
 package com.example.salesbuddy.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class SaleSerializable implements Serializable {
     private String name;
@@ -8,11 +9,14 @@ public class SaleSerializable implements Serializable {
     private String email;
     private String description;
     private int qtdItems;
-    private double valueSale;
-    private double valueReceived;
-    private double changeDue;
+    private BigDecimal valueSale;
+    private BigDecimal valueReceived;
+    private BigDecimal changeDue;
 
-    public SaleSerializable(String name, String cpf, String email, String description, int qtdItems, double valueSale, double valueReceived, double changeDue) {
+    public SaleSerializable() {
+    }
+
+    public SaleSerializable(String name, String cpf, String email, String description, int qtdItems, BigDecimal valueSale, BigDecimal valueReceived, BigDecimal changeDue) {
         this.name = name;
         this.cpf = cpf;
         this.email = email;
@@ -63,27 +67,27 @@ public class SaleSerializable implements Serializable {
         this.qtdItems = qtdItems;
     }
 
-    public double getValueSale() {
+    public BigDecimal getValueSale() {
         return valueSale;
     }
 
-    public void setValueSale(double valueSale) {
+    public void setValueSale(BigDecimal valueSale) {
         this.valueSale = valueSale;
     }
 
-    public double getValueReceived() {
+    public BigDecimal getValueReceived() {
         return valueReceived;
     }
 
-    public void setValueReceived(double valueReceived) {
+    public void setValueReceived(BigDecimal valueReceived) {
         this.valueReceived = valueReceived;
     }
 
-    public double getChangeDue() {
+    public BigDecimal getChangeDue() {
         return changeDue;
     }
 
-    public void setChangeDue(double changeDue) {
+    public void setChangeDue(BigDecimal changeDue) {
         this.changeDue = changeDue;
     }
 }
