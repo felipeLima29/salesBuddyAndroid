@@ -27,6 +27,7 @@ import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
 import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
+import com.example.salesbuddy.view.dialog.MessageDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -123,7 +124,7 @@ public class ReceiptActivity extends IncludeToolbar {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    ShowCustomToast.show(getApplicationContext(), "Comprovante Enviado", "SUCESS"); //temporario
+                    MessageDialog.show(ReceiptActivity.this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: " + email);
                 } else {
                     ShowCustomToast.show(ReceiptActivity.this, "Erro ao enviar: " + response.code(), "ERROR");
                 }
