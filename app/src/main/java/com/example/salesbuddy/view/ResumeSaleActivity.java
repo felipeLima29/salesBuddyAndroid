@@ -97,6 +97,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
                 if(response.isSuccessful()){
                     ShowCustomToast.show(getApplicationContext(), salesResponse.getMessage(), "SUCESS");
                     Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
+                    intent.putExtra("saleData", saleDataReceived);
                     startActivity(intent);
                 } else {
                     try {
