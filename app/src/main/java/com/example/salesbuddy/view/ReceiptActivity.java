@@ -1,5 +1,6 @@
 package com.example.salesbuddy.view;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -42,7 +43,7 @@ import retrofit2.Response;
 
 public class ReceiptActivity extends IncludeToolbar {
     private TextView tvNameReceipt, tvCpfReceipt, tvEmailReceipt, tvValueReceivedReceipt, tvValueSaleReceipt, tvDueChangeReceipt;
-    private AppCompatButton btnSendReceipt;
+    private AppCompatButton btnSendReceipt, btnBackReceipt;
     private ResumeAdapter adapter;
     private SaleSerializable saleDataReceived;
     private List<ItemsSale> itemsSale = new ArrayList<>();
@@ -65,10 +66,19 @@ public class ReceiptActivity extends IncludeToolbar {
         tvValueSaleReceipt = findViewById(R.id.tvValueSaleReceipt);
         tvDueChangeReceipt = findViewById(R.id.tvDueChange);
         btnSendReceipt = findViewById(R.id.btnSendReceipt);
+        btnBackReceipt = findViewById(R.id.btnBackReceipt);
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
 
         ConstraintLayout layout = findViewById(R.id.layoutReceipt);
-        btnSendReceipt = findViewById(R.id.btnSendReceipt);
+
+        btnBackReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterSalesActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         btnSendReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,8 +105,6 @@ public class ReceiptActivity extends IncludeToolbar {
         rvItems.setAdapter(adapter);
 
         getDataSale();
-
-
         configToolbar("COMPROVANTE");
     }
 
@@ -165,8 +173,6 @@ public class ReceiptActivity extends IncludeToolbar {
         } else {
             saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
         }
-        Log.d("HOME", "getDataSale: " + saleDataReceived);
-
         if (saleDataReceived != null) {
             tvNameReceipt.setText(saleDataReceived.getName());
             tvCpfReceipt.setText(saleDataReceived.getCpf());
@@ -180,7 +186,6 @@ public class ReceiptActivity extends IncludeToolbar {
             tvDueChangeReceipt.setText(getChangeDue);
 
             String listItems = saleDataReceived.getDescription();
-            Log.d("HOME", "getDataSale: " + listItems);
             if (listItems != null || listItems.isEmpty()) {
                 String[] items = listItems.split("#");
 
@@ -189,10 +194,8 @@ public class ReceiptActivity extends IncludeToolbar {
                             "R$ --",
                             nameItem.trim()
                     );
-
                     itemsSale.add(itemsForList);
                 }
-
                 adapter.notifyDataSetChanged();
             } else {
                 Log.d("DEBUG_LISTA", "Erro");
