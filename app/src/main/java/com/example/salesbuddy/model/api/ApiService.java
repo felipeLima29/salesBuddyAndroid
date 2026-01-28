@@ -3,10 +3,7 @@ package com.example.salesbuddy.model.api;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.model.request.LoginRequest;
 import com.example.salesbuddy.model.request.LoginResponse;
-import com.example.salesbuddy.model.request.Sales;
 import com.example.salesbuddy.model.request.SalesResponse;
-
-import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;

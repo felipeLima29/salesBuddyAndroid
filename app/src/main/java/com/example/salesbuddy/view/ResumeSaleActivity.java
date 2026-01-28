@@ -19,7 +19,6 @@ import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
-import com.example.salesbuddy.model.request.Sales;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.SalesResponse;
 import com.example.salesbuddy.utils.SharedPreferencesUtil;
