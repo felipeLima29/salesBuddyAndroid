@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SalesBuddy"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ReprocessingActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.dialog.MessageDialog"
             android:exported="false" />
         <activity
