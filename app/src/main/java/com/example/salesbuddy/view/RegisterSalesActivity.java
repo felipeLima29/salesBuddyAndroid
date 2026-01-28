@@ -120,6 +120,7 @@ public class RegisterSalesActivity extends IncludeToolbar {
                 qtdItems++;
             }
         }
+        Log.d("INFO", "QTD_ITEMS: " + qtdItems);
 
         String finalDescription = allDescriptions.toString();
 

@@ -119,7 +119,6 @@ public class ReceiptActivity extends IncludeToolbar {
 
         ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
         Call<ResponseBody> call = api.sendReceipt(body, email, token);
-        Log.d("INFO", "sendReceipt: " + email + body);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
