@@ -49,15 +49,20 @@ public class IncludeToolbar extends AppCompatActivity {
             optRegisterSaleToolbar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(IncludeToolbar.this, "toast", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(IncludeToolbar.this, RegisterSalesActivity.class);
+                    startActivity(intent);
                 }
             });
         }
 
         if(optReprocessToolbar != null){
-            optReprocessToolbar.setOnClickListener(v ->
-                    Toast.makeText(IncludeToolbar.this, "Reprocessar clicado", Toast.LENGTH_SHORT).show()
-            );
+            optReprocessToolbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(IncludeToolbar.this, ReprocessingActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         if(optLogOutToolbar != null){

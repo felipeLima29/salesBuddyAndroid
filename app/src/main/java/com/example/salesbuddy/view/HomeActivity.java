@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +21,8 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton btnMenu;
     private CardView cardMenuOptions;
     private boolean isMenuOpen = true;
-    private TextView optRegisterSale;
-    private TextView optReprocess;
-    private TextView optLogOut;
-    private AppCompatButton btnRegisterSale;
-    private AppCompatButton btnReprocess;
+    private TextView optRegisterSale, optReprocess, optLogOut;
+    private AppCompatButton btnRegisterSale, btnReprocess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +43,13 @@ public class HomeActivity extends AppCompatActivity {
         optReprocess = findViewById(R.id.optReprocess);
         optLogOut = findViewById(R.id.optLogOut);
 
+        btnReprocess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, ReprocessingActivity.class);
+                startActivity(intent);
+            }
+        });
         configClick();
     }
 
