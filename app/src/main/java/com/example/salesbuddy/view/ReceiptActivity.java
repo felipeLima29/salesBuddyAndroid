@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -125,6 +126,15 @@ public class ReceiptActivity extends IncludeToolbar {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     MessageDialog.show(ReceiptActivity.this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: ", email);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(ReceiptActivity.this, RegisterSalesActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }, 4000);
+
                 } else {
                     ShowCustomToast.show(ReceiptActivity.this, "Erro ao enviar: " + response.code(), "ERROR");
                 }
