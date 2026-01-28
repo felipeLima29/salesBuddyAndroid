@@ -19,13 +19,20 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.salesbuddy.R;
 
 public class MessageDialog extends AppCompatActivity {
-    public static void show(Context context, String message) {
+    public static void show(Context context, String message, String email) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.activity_message_dialog);
-        dialog.setCancelable(true); //
+        dialog.setCancelable(true);
 
+        TextView tvEmail = dialog.findViewById(R.id.tvDialogEmail);
         TextView tvMessage = dialog.findViewById(R.id.tvDialogMessage);
+        if(email == null){
+            tvEmail.setText(null);
+        } else {
+            tvEmail.setText(email);
+        }
+
         tvMessage.setText(message);
 
         if (dialog.getWindow() != null) {

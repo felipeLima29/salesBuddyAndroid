@@ -124,7 +124,7 @@ public class ReceiptActivity extends IncludeToolbar {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    MessageDialog.show(ReceiptActivity.this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: " + email);
+                    MessageDialog.show(ReceiptActivity.this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: ", email);
                 } else {
                     ShowCustomToast.show(ReceiptActivity.this, "Erro ao enviar: " + response.code(), "ERROR");
                 }
