@@ -191,9 +191,10 @@ public class ReceiptActivity extends IncludeToolbar {
             String getValueReceived = String.valueOf(saleDataReceived.getValueReceived()).toString();
             String getValueSale = String.valueOf(saleDataReceived.getValueSale()).toString();
             String getChangeDue = String.valueOf(saleDataReceived.getChangeDue()).toString();
-            tvValueReceivedReceipt.setText(getValueReceived);
-            tvValueSaleReceipt.setText(getValueSale);
-            tvDueChangeReceipt.setText(getChangeDue);
+
+            tvValueReceivedReceipt.setText("R$ " + getValueReceived);
+            tvValueSaleReceipt.setText("R$ " + getValueSale);
+            tvDueChangeReceipt.setText("R$ " + getChangeDue);
 
             String listItems = saleDataReceived.getDescription();
             if (listItems != null || listItems.isEmpty()) {

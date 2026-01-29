@@ -23,6 +23,7 @@ import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.SalesResponse;
+import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
 import com.example.salesbuddy.utils.StaticsKeysUtil;
@@ -99,10 +100,10 @@ public class ResumeSaleActivity extends IncludeToolbar {
             ShowCustomToast.show(ResumeSaleActivity.this, "Por favor, preencha todos os campos e tente novamente.", "ERROR");
             return;
         }
-        String clearCpf = saleDataReceived.getCpf().replaceAll("[^0-9]", "");
+        String cpfClear = MasksUtil.unmask(saleDataReceived.getCpf());
         SaleSerializable saleForSend = new SaleSerializable(
                 saleDataReceived.getName(),
-                clearCpf,
+                cpfClear,
                 saleDataReceived.getEmail(),
                 saleDataReceived.getDescription(),
                 saleDataReceived.getQtdItems(),
@@ -162,9 +163,9 @@ public class ResumeSaleActivity extends IncludeToolbar {
             String getValueSale = String.valueOf(saleDataReceived.getValueSale()).toString();
             String getChangeDue = String.valueOf(saleDataReceived.getChangeDue()).toString();
 
-            tvShowValueReceived.setText(getValueReceived);
-            tvValueSale.setText(getValueSale);
-            tvDueChange.setText(getChangeDue);
+            tvShowValueReceived.setText("R$ " + getValueReceived);
+            tvValueSale.setText("R$ " + getValueSale);
+            tvDueChange.setText("R$ " + getChangeDue);
             String listItems = saleDataReceived.getDescription();
 
             if (listItems != null || listItems.isEmpty()) {

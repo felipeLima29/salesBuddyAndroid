@@ -56,6 +56,8 @@ public class RegisterSalesActivity extends IncludeToolbar {
         containerProducts = findViewById(R.id.containerProducts);
 
         txCpf.addTextChangedListener(MasksUtil.mask(MasksUtil.FORMAT_CPF, txCpf));
+        txSaleValue.addTextChangedListener(MasksUtil.money(txSaleValue));
+        txReceivedValue.addTextChangedListener(MasksUtil.money(txReceivedValue));
 
         btnAddItem.setOnClickListener(v -> addNewItemInput());
         btnRegister.setOnClickListener(v -> registerSale());
@@ -97,8 +99,8 @@ public class RegisterSalesActivity extends IncludeToolbar {
         String name = txClientName.getText().toString();
         String cpf = txCpf.getText().toString();
         String email = txEmail.getText().toString();
-        String valueSaleString = txSaleValue.getText().toString();
-        String valueReceivedString = txReceivedValue.getText().toString();
+        String valueSaleString = MasksUtil.unmaskPrice(txSaleValue.getText().toString());
+        String valueReceivedString = MasksUtil.unmaskPrice(txReceivedValue.getText().toString());
 
         if (name.isEmpty() || valueSaleString.isEmpty() || valueReceivedString.isEmpty()) {
             ShowCustomToast.show(RegisterSalesActivity.this, "Preencha todos os campos.", "ERROR");
