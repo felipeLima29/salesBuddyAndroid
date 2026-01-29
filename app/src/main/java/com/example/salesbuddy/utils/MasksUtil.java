@@ -57,12 +57,10 @@ public class MasksUtil {
         return s.replaceAll("[^0-9]*", "");
     }
 
-    // --- MÁSCARA DE DINHEIRO SEM R$ ---
+
     public static TextWatcher money(final EditText editText) {
         return new TextWatcher() {
             private boolean isUpdating = false;
-
-            // Força o padrão brasileiro: Ponto para milhar, Vírgula para decimal
             private final DecimalFormat df = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
             @Override
@@ -75,27 +73,22 @@ public class MasksUtil {
                 isUpdating = true;
                 String str = s.toString();
 
-                // 1. Limpa tudo que não for dígito numérico
                 str = str.replaceAll("[^\\d]", "");
 
                 try {
-                    // Se estiver vazio, evita erro
                     if (str.isEmpty()) {
                         editText.setText("");
                         isUpdating = false;
                         return;
                     }
 
-                    // 2. Transforma em BigDecimal e divide por 100 (centavos)
                     BigDecimal valor = new BigDecimal(str).divide(new BigDecimal(100));
 
-                    // 3. Formata (Ex: 1500 vira 15,00)
                     String formatado = df.format(valor);
 
                     editText.setText(formatado);
-                    editText.setSelection(formatado.length()); // Move cursor pro final
+                    editText.setSelection(formatado.length());
                 } catch (NumberFormatException e) {
-                    // Em caso de erro, limpa
                     editText.setText("");
                 }
             }
@@ -107,8 +100,6 @@ public class MasksUtil {
             public void afterTextChanged(Editable s) {}
         };
     }
-
-    // Transforma "1.200,50" em "1200.50"
     public static String unmaskPrice(String valorFormatado) {
         if (valorFormatado == null || valorFormatado.isEmpty()) return "";
 
