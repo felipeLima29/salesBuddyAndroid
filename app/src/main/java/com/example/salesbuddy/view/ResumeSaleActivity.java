@@ -1,5 +1,7 @@
 package com.example.salesbuddy.view;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -78,7 +80,10 @@ public class ResumeSaleActivity extends IncludeToolbar {
         btnAlter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(ResumeSaleActivity.this, ResumeSaleActivity.class);
+                intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
             }
         });
         configToolbar("RESUMO VENDA", RegisterSalesActivity.class);
@@ -89,7 +94,23 @@ public class ResumeSaleActivity extends IncludeToolbar {
         ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
         String getToken = sp.fetchValueString(StaticsKeysUtil.Token);
         String auth = "Bearer " + getToken;
-        Call<SalesResponse> insertSaleCall = api.insertSale(saleDataReceived, auth);
+
+        if(saleDataReceived == null){
+            ShowCustomToast.show(ResumeSaleActivity.this, "Por favor, preencha todos os campos e tente novamente.", "ERROR");
+            return;
+        }
+        String clearCpf = saleDataReceived.getCpf().replaceAll("[^0-9]", "");
+        SaleSerializable saleForSend = new SaleSerializable(
+                saleDataReceived.getName(),
+                clearCpf,
+                saleDataReceived.getEmail(),
+                saleDataReceived.getDescription(),
+                saleDataReceived.getQtdItems(),
+                saleDataReceived.getValueSale(),
+                saleDataReceived.getValueReceived(),
+                saleDataReceived.getChangeDue()
+        );
+        Call<SalesResponse> insertSaleCall = api.insertSale(saleForSend, auth);
 
         insertSaleCall.enqueue(new Callback<SalesResponse>() {
             @Override
@@ -105,7 +126,6 @@ public class ResumeSaleActivity extends IncludeToolbar {
                         Gson gson = new Gson();
                         SalesResponse errorData = gson.fromJson(response.errorBody().charStream(),
                                 SalesResponse.class);
-
                         String getMessage = errorData.getMessage();
                         ShowCustomToast.show(ResumeSaleActivity.this, getMessage, "ERROR");
                     } catch (Exception e) {
@@ -160,12 +180,12 @@ public class ResumeSaleActivity extends IncludeToolbar {
                 }
 
             } else {
-                Log.e("INFO", "Erro: Objeto veio nul");
+                ShowCustomToast.show(ResumeSaleActivity.this, "Dados nulos, saia e tente novamente.", "ERROR");
             }
 
             adapter.notifyDataSetChanged();
         } else {
-            Log.d("DEBUG_LISTA", "Erro");
+            ShowCustomToast.show(ResumeSaleActivity.this, "Dados nulos, saia e tente novamente.", "ERROR");
         }
     }
 }
