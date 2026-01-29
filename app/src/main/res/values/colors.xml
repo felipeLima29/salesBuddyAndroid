@@ -7,6 +7,7 @@
     <color name="pink">#A32C65</color>
     <color name="txInput">#C0CDD8</color>
     <color name="txInputSale">#707070</color>
+    <color name="borderGray">#797979</color>
     <color name="btnYes">#408140</color>
     <color name="btnNo">#A32C2C</color>
     <color name="error">#FF0000</color>

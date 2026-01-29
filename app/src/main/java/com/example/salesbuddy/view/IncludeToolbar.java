@@ -1,27 +1,28 @@
 package com.example.salesbuddy.view;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
 import com.example.salesbuddy.R;
 
 public class IncludeToolbar extends AppCompatActivity {
 
-    protected ImageView btnMenuToolbar;
-    protected ImageView btnExitToolbar;
+    protected ImageView btnMenuToolbar, btnExitToolbar;
     protected CardView cardMenuOptionsToolbar;
-    protected TextView optRegisterSaleToolbar;
-    protected TextView optReprocessToolbar;
-    protected TextView optLogOutToolbar;
-    protected TextView tvPageTitle;
+    protected TextView optRegisterSaleToolbar, optReprocessToolbar, optLogOutToolbar, tvPageTitle;
     protected boolean isMenuOpen = false;
 
-    protected void configToolbar(String titlePage){
+    protected void configToolbar(String titlePage, Class<?> targetActivity) {
 
         btnMenuToolbar = findViewById(R.id.btnMenuToolbar);
         btnExitToolbar = findViewById(R.id.btnExitToolbar);
@@ -31,13 +32,21 @@ public class IncludeToolbar extends AppCompatActivity {
         optLogOutToolbar = findViewById(R.id.optLogOutToolbar);
         tvPageTitle = findViewById(R.id.tvPageTitle);
 
-        if(tvPageTitle != null){
+        if (tvPageTitle != null) {
             tvPageTitle.setText(titlePage);
         }
 
-        if(btnExitToolbar != null){
+        if (btnExitToolbar != null) {
             btnExitToolbar.setOnClickListener(v -> {
-                finish();
+                if (targetActivity == null){
+                    finish();
+                } else {
+                    Intent intent = new Intent(v.getContext(), targetActivity);
+
+                    intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                }
             });
         }
 
@@ -45,30 +54,25 @@ public class IncludeToolbar extends AppCompatActivity {
             btnMenuToolbar.setOnClickListener(v -> toggleMenu());
         }
 
-        if(optRegisterSaleToolbar != null){
-            optRegisterSaleToolbar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(IncludeToolbar.this, RegisterSalesActivity.class);
-                    startActivity(intent);
-                }
+        if (optRegisterSaleToolbar != null) {
+            optRegisterSaleToolbar.setOnClickListener(v -> {
+                Log.d("INFO", "Botao clicado");
+                Intent intent = new Intent(v.getContext(), RegisterSalesActivity.class);
+                startActivity(intent);
             });
         }
 
-        if(optReprocessToolbar != null){
-            optReprocessToolbar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(IncludeToolbar.this, ReprocessingActivity.class);
-                    startActivity(intent);
-                }
+        if (optReprocessToolbar != null) {
+            optReprocessToolbar.setOnClickListener(v -> {
+                Log.d("INFO", "Botao clicado");
+                Intent intent = new Intent(v.getContext(), ReprocessingActivity.class);
+                startActivity(intent);
             });
         }
 
-        if(optLogOutToolbar != null){
+        if (optLogOutToolbar != null) {
             optLogOutToolbar.setOnClickListener(v -> {
-                Intent intent = new Intent(IncludeToolbar.this, LoginActivity.class);
-
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
@@ -76,8 +80,8 @@ public class IncludeToolbar extends AppCompatActivity {
         }
     }
 
-    private void toggleMenu (){
-        if (isMenuOpen){
+    private void toggleMenu() {
+        if (isMenuOpen) {
             btnMenuToolbar.setImageResource(R.drawable.ic_menu);
             cardMenuOptionsToolbar.setVisibility(View.GONE);
             isMenuOpen = false;

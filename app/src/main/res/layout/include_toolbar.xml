@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="@null"
     android:clickable="false"
     android:focusable="false"
-
     tools:context=".view.IncludeToolbar">
 
     <View
@@ -23,68 +20,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerContainer" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardMenuOptionsToolbar"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/whiteSmoke"
-        android:visibility="gone"
-        app:cardElevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/headerContainer">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/optRegisterSaleToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteSmoke"
-                android:fontFamily="@font/montserrat_bold"
-                android:padding="10dp"
-                android:text="REGISTRAR VENDA"
-                android:textColor="@color/blue"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
-
-            <TextView
-                android:id="@+id/optReprocessToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteSmoke"
-                android:fontFamily="@font/montserrat_bold"
-                android:padding="10dp"
-                android:text="REPROCESSAR"
-                android:textColor="@color/blue"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
-
-            <TextView
-                android:id="@+id/optLogOutToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteSmoke"
-                android:fontFamily="@font/montserrat_bold"
-                android:padding="10dp"
-                android:text="LOG OUT"
-                android:textColor="@color/blue"
-                android:textSize="14sp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -152,13 +87,86 @@
         app:layout_constraintStart_toEndOf="@+id/tvPageTitle"
         app:layout_constraintTop_toTopOf="@+id/tvPageTitle" />
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardMenuOptionsToolbar"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/whiteSmoke"
+        android:clickable="true"
+        android:elevation="50dp"
+        android:focusable="true"
+        android:translationZ="50dp"
+        android:visibility="gone"
+        app:cardElevation="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/headerContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/optRegisterSaleToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:backgroundTint="@color/whiteSmoke"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/montserrat_bold"
+                android:padding="10dp"
+                android:text="REGISTRAR VENDA"
+                android:textColor="@color/blue"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
+
+            <TextView
+                android:id="@+id/optReprocessToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteSmoke"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/montserrat_bold"
+                android:padding="10dp"
+                android:text="REPROCESSAR"
+                android:textColor="@color/blue"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
+
+            <TextView
+                android:id="@+id/optLogOutToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteSmoke"
+                android:fontFamily="@font/montserrat_bold"
+                android:padding="10dp"
+                android:text="LOG OUT"
+                android:textColor="@color/blue"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
     <ImageButton
         android:id="@+id/btnMenuToolbar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:elevation="60dp"
+        android:translationZ="60dp"
         android:src="@drawable/ic_menu"
-        android:elevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

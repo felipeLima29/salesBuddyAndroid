@@ -8,15 +8,6 @@
     android:background="@drawable/ic_background"
     tools:context=".view.ResumeSaleActivity">
 
-    <include
-        android:id="@+id/includeToolbar"
-        layout="@layout/include_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -272,7 +263,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnYes"
+            android:id="@+id/btnAlter"
             android:layout_width="140dp"
             android:layout_height="65dp"
             android:layout_marginEnd="8dp"
@@ -298,5 +289,14 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <include
+        android:id="@+id/includeToolbar"
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

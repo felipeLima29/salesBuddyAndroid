@@ -107,7 +107,7 @@ public class ReceiptActivity extends IncludeToolbar {
         rvItems.setAdapter(adapter);
 
         getDataSale();
-        configToolbar("COMPROVANTE");
+        configToolbar("COMPROVANTE", ResumeSaleActivity.class);
     }
 
     private void sendReceipt(File file, String email) {

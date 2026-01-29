@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         configClick();
     }
 
@@ -59,6 +60,21 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toggleMenu();
+            }
+        });
+        optRegisterSale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, RegisterSalesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        optReprocess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, ReprocessingActivity.class);
+                startActivity(intent);
             }
         });
 

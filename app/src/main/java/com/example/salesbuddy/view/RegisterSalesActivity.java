@@ -56,7 +56,7 @@ public class RegisterSalesActivity extends IncludeToolbar {
         btnAddItem.setOnClickListener(v -> addNewItemInput());
         btnRegister.setOnClickListener(v -> registerSale());
 
-        configToolbar("REGISTRAR VENDA");
+        configToolbar("REGISTRAR VENDA", HomeActivity.class);
     }
 
     private void addNewItemInput() {

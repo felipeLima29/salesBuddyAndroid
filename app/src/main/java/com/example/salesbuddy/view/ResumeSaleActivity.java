@@ -36,13 +36,8 @@ import retrofit2.Response;
 
 public class ResumeSaleActivity extends IncludeToolbar {
     private SaleSerializable saleDataReceived;
-    private AppCompatButton btnFinishSale;
-    private TextView tvShowName;
-    private TextView tvShowCpf;
-    private TextView tvShowEmail;
-    private TextView tvShowValueReceived;
-    private TextView tvValueSale;
-    private TextView tvDueChange;
+    private AppCompatButton btnFinishSale, btnAlter;
+    private TextView tvShowName, tvShowCpf, tvShowEmail, tvShowValueReceived, tvValueSale, tvDueChange;
     private ResumeAdapter adapter;
     private List<ItemsSale> itemsSale = new ArrayList<>();
 
@@ -58,6 +53,7 @@ public class ResumeSaleActivity extends IncludeToolbar {
         });
 
         btnFinishSale = findViewById(R.id.btnFinishSale);
+        btnAlter = findViewById(R.id.btnAlter);
         tvShowName = findViewById(R.id.tvNameReceipt);
         tvShowCpf = findViewById(R.id.tvCpfReceipt);
         tvShowEmail = findViewById(R.id.tvEmailReceipt);
@@ -79,7 +75,13 @@ public class ResumeSaleActivity extends IncludeToolbar {
             }
         });
 
-        configToolbar("RESUMO VENDA");
+        btnAlter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        configToolbar("RESUMO VENDA", RegisterSalesActivity.class);
     }
 
     private void insertSale() {
