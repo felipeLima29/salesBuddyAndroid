@@ -3,6 +3,7 @@ package com.example.salesbuddy.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.SaleSerializable;
+import com.example.salesbuddy.utils.MasksUtil;
+import com.example.salesbuddy.utils.ShowCustomToast;
 
 import java.math.BigDecimal;
 
@@ -50,8 +53,9 @@ public class RegisterSalesActivity extends IncludeToolbar {
         txReceivedValue = findViewById(R.id.txReceivedValue);
         btnRegister = findViewById(R.id.btnRegiSter);
         btnAddItem = findViewById(R.id.btnAddItem);
-
         containerProducts = findViewById(R.id.containerProducts);
+
+        txCpf.addTextChangedListener(MasksUtil.mask(MasksUtil.FORMAT_CPF, txCpf));
 
         btnAddItem.setOnClickListener(v -> addNewItemInput());
         btnRegister.setOnClickListener(v -> registerSale());
@@ -96,41 +100,65 @@ public class RegisterSalesActivity extends IncludeToolbar {
         String valueSaleString = txSaleValue.getText().toString();
         String valueReceivedString = txReceivedValue.getText().toString();
 
-        BigDecimal valueSale = new BigDecimal(valueSaleString);
-        BigDecimal valueReceived = new BigDecimal(valueReceivedString);
-        BigDecimal changeDue = valueReceived.subtract(valueSale);
-
-        int qtdItems = 0;
-        StringBuilder allDescriptions = new StringBuilder();
-
-        String textFix = txItemName.getText().toString().trim();
-        if (!textFix.isEmpty()) {
-            allDescriptions.append(textFix);
-            qtdItems++;
+        if (name.isEmpty() || valueSaleString.isEmpty() || valueReceivedString.isEmpty()) {
+            ShowCustomToast.show(RegisterSalesActivity.this, "Preencha todos os campos.", "ERROR");
+            return;
+        }
+        if (cpf.length() < 14) {
+            ShowCustomToast.show(RegisterSalesActivity.this, "Digite um cpf válido.", "ERROR");
+            return;
+        }
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            ShowCustomToast.show(RegisterSalesActivity.this, "Digite um e-mail válido.", "ERROR");
+            return;
         }
 
-        // Loop para pegar os itens dinâmicos do container
-        for (int i = 0; i < containerProducts.getChildCount(); i++) {
-            View dynamicRow = containerProducts.getChildAt(i);
-            EditText etDynamic = dynamicRow.findViewById(R.id.etDynamicItem);
+        try {
+            BigDecimal valueSale = new BigDecimal(valueSaleString);
+            BigDecimal valueReceived = new BigDecimal(valueReceivedString);
 
-            String text = etDynamic.getText().toString().trim();
-            if (!text.isEmpty()) {
-                allDescriptions.append("# ").append(text);
+            if(valueReceived.compareTo(valueSale) < 0){
+                ShowCustomToast.show(RegisterSalesActivity.this, "Valor recebido menor que valor da venda", "ERROR");
+                return;
+            }
+            BigDecimal changeDue = valueReceived.subtract(valueSale);
+
+            int qtdItems = 0;
+            StringBuilder allDescriptions = new StringBuilder();
+
+            String textFix = txItemName.getText().toString().trim();
+            if (!textFix.isEmpty()) {
+                allDescriptions.append(textFix);
                 qtdItems++;
             }
+
+            // Loop para pegar os itens dinâmicos do container
+            for (int i = 0; i < containerProducts.getChildCount(); i++) {
+                View dynamicRow = containerProducts.getChildAt(i);
+                EditText etDynamic = dynamicRow.findViewById(R.id.etDynamicItem);
+
+                String text = etDynamic.getText().toString().trim();
+                if (!text.isEmpty()) {
+                    allDescriptions.append("# ").append(text);
+                    qtdItems++;
+                }
+            }
+
+            String finalDescription = allDescriptions.toString();
+
+            SaleSerializable saleSerializable = new SaleSerializable(name,
+                    cpf, email,
+                    finalDescription,
+                    qtdItems, valueSale,
+                    valueReceived, changeDue);
+            Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
+            intent.putExtra("saleData", saleSerializable);
+            startActivity(intent);
+        } catch (NumberFormatException e) {
+            ShowCustomToast.show(RegisterSalesActivity.this,
+                    "Formato de valor inválido. Use ponto (.) para centavos.",
+                    "ERROR");
         }
-        Log.d("INFO", "QTD_ITEMS: " + qtdItems);
 
-        String finalDescription = allDescriptions.toString();
-
-        SaleSerializable saleSerializable = new SaleSerializable(name,
-                cpf, email,
-                finalDescription,
-                qtdItems, valueSale,
-                valueReceived, changeDue);
-        Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
-        intent.putExtra("saleData", saleSerializable);
-        startActivity(intent);
     }
 }
