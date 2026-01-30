@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
+import com.example.salesbuddy.controller.LoginController;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.LoginRequest;
@@ -34,9 +35,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements ILoginView {
     private Button btnLogin;
     private TextInputLayout txInputUser, txInputPassword;
+
+    private LoginController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,55 +56,38 @@ public class LoginActivity extends AppCompatActivity {
         txInputUser = findViewById(R.id.txInputUser);
         txInputPassword = findViewById(R.id.txInputPassword);
 
-        btnLogin.setOnClickListener(v -> login());
+        controller = new LoginController(this, this);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String usuario = Objects.requireNonNull(txInputUser.getEditText().getText().toString().trim());
+                String password = Objects.requireNonNull(txInputPassword.getEditText().getText().toString().trim());
+                controller.doLogin(usuario, password);
+            }
+        });
     }
 
 
-    private void login(){
-        SharedPreferencesUtil sp = SharedPreferencesUtil.instance(getApplicationContext());
-        String usuario = Objects.requireNonNull(txInputUser.getEditText()).getText().toString().trim();
-        String password = Objects.requireNonNull(txInputPassword.getEditText()).getText().toString().trim();
+    @Override
+    public void showLoading() {
+        btnLogin.setEnabled(false);
+    }
 
-        if (usuario.isEmpty() || password.isEmpty()) {
-            ShowCustomToast.show(getApplicationContext(), "Preencha todos os campos", "WARNING");
-        } else {
-            LoginRequest loginData = new LoginRequest(usuario, password);
-            ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
-            Call<LoginResponse> responseCall = api.login(loginData);
+    @Override
+    public void hideLoading() {
+        btnLogin.setEnabled(true);
+    }
 
-            responseCall.enqueue(new Callback<LoginResponse>() {
-                @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    LoginResponse loginResponse = response.body();
-                    if (response.isSuccessful()) {
-                        sp.storeValueString(StaticsKeysUtil.Token, loginResponse.getToken());
-                        if (loginResponse.getLogin()) {
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            ShowCustomToast.show(getApplicationContext(), "Email e/ou senha inválidas.", "ERROR");
-                        }
-                    } else {
-                        Log.e("ERROR", "sem sucesso: " + response.code());
-                        try {
-                            Gson gson = new Gson();
-                            LoginResponse errorData = gson.fromJson(response.errorBody().charStream(), LoginResponse.class);
+    @Override
+    public void onLoginSuccess() {
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-                            String message = errorData.getMessage();
-                            ShowCustomToast.show(getApplicationContext(), message, "ERROR");
-                        } catch (Exception e) {
-                            ShowCustomToast.show(getApplicationContext(), "Erro no servidor", "ERROR");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Log.e("ERROR", "onFailue: " + t.getMessage());
-                }
-            });
-        }
+    @Override
+    public void onLoginError(String message) {
+        ShowCustomToast.show(getApplicationContext(), message, "ERROR");
     }
 }
