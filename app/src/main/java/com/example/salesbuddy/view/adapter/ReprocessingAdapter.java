@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ReprocessingItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReprocessingAdapter extends RecyclerView.Adapter<ReprocessingAdapter.ViewHolder> {
@@ -24,7 +25,11 @@ public class ReprocessingAdapter extends RecyclerView.Adapter<ReprocessingAdapte
     private List<ReprocessingItem> items;
 
     public ReprocessingAdapter(List<ReprocessingItem> items) {
-        this.items = items;
+        if(items == null) {
+            this.items = new ArrayList<>();
+        }else {
+            this.items = items;
+        }
     }
 
 

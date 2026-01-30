@@ -42,13 +42,13 @@ public class ReprocessingActivity extends IncludeToolbar {
         recyclerView = findViewById(R.id.rvReprocessing);
         btnReprocess = findViewById(R.id.btnReprocessing);
 
+        createMockData();
+
         adapter = new ReprocessingAdapter(mockList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
         btnReprocess.setOnClickListener(v -> startReprocessingSimulation());
-
-        createMockData();
         configToolbar("REPROCESSAMENTO", HomeActivity.class);
     }
 

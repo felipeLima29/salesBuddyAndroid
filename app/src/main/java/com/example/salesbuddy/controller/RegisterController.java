@@ -19,8 +19,10 @@ public class RegisterController {
     public void processSale(String name, String cpf, String email,
                             String valueSaleRaw, String valueReceivedRaw,
                             String item, List<String> itemsExtra) {
+
         String valueSaleString = MasksUtil.unmaskPrice(valueSaleRaw);
         String valueReceivedString = MasksUtil.unmaskPrice(valueReceivedRaw);
+        String itemPrincipal = item.trim();
 
         if (name.isEmpty() || valueSaleString.isEmpty() || valueReceivedString.isEmpty()) {
             view.showError("Preencha todos os campos.");
@@ -30,6 +32,21 @@ public class RegisterController {
         if (cpf.length() < 14) {
             view.showError("Digite um CPF válido.");
             return;
+        }
+
+        if (itemPrincipal.isEmpty()) {
+            view.showError("O nome do primeiro item é obrigatório.");
+            return;
+        }
+
+        if (itemsExtra != null) {
+            for (int i = 0; i < itemsExtra.size(); i++) {
+                String itemExtra = itemsExtra.get(i);
+                if (itemExtra.isEmpty()) {
+                    view.showError("O Item extra nº " + (i + 1) + " está vazio. Preencha ou remova a linha.");
+                    return;
+                }
+            }
         }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

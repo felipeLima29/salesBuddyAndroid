@@ -75,12 +75,12 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
                 List<String> itemsExtra = getItemsDynamics();
 
                 controller.processSale(
-                        txClientName.getText().toString(),
-                        txCpf.getText().toString(),
-                        txEmail.getText().toString(),
+                        txClientName.getText().toString().trim(),
+                        txCpf.getText().toString().trim(),
+                        txEmail.getText().toString().trim(),
                         txSaleValue.getText().toString(),
                         txReceivedValue.getText().toString(),
-                        txItemName.getText().toString(),
+                        txItemName.getText().toString().trim(),
                         itemsExtra
                 );
             }
