@@ -112,7 +112,7 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
     private void removeView(View view) {
         containerProducts.removeView(view);
         itemCount--;
-        Toast.makeText(this, "Item removido", Toast.LENGTH_SHORT).show();
+        ShowCustomToast.show(this, "Item removido", "SUCCESS");
     }
 
     private List<String> getItemsDynamics() {
