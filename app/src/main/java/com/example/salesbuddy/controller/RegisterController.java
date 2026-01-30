@@ -62,6 +62,11 @@ public class RegisterController {
                 view.showError("Valor recebido menor que valor da venda");
                 return;
             }
+            if (valueSale.compareTo(BigDecimal.ZERO) <= 0) {
+                view.showError("O valor da venda deve ser maior que zero.");
+                return;
+            }
+
 
             BigDecimal changeDue = valueReceived.subtract(valueSale);
 
