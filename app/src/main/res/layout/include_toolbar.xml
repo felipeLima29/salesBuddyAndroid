@@ -90,10 +90,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardMenuOptionsToolbar"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/whiteSmoke"
+        android:backgroundTint="@color/whiteTransparent"
         android:clickable="true"
         android:elevation="50dp"
         android:focusable="true"
