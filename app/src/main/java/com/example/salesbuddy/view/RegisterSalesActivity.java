@@ -91,7 +91,7 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
 
     private void addNewItemInput() {
         if (itemCount >= MAX_ITEMS) {
-            Toast.makeText(this, "Máximo de 4 itens atingido!", Toast.LENGTH_SHORT).show();
+            ShowCustomToast.show(RegisterSalesActivity.this, "Máximo de 4 itens atingidos", "ERROR");
             return;
         }
         View view = LayoutInflater.from(this).inflate(R.layout.item_dynamic_sale, containerProducts, false);

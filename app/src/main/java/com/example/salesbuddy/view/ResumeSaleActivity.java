@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
+import com.example.salesbuddy.controller.ResumeController;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
@@ -28,6 +29,7 @@ import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
 import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
+import com.example.salesbuddy.view.contracts.IResumeView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -37,12 +39,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ResumeSaleActivity extends IncludeToolbar {
+public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
     private SaleSerializable saleDataReceived;
     private AppCompatButton btnFinishSale, btnAlter;
     private TextView tvShowName, tvShowCpf, tvShowEmail, tvShowValueReceived, tvValueSale, tvDueChange;
     private ResumeAdapter adapter;
     private List<ItemsSale> itemsSale = new ArrayList<>();
+
+    private ResumeController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,124 +73,56 @@ public class ResumeSaleActivity extends IncludeToolbar {
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
 
-        getDataSale();
+        controller = new ResumeController((IResumeView) this, this);
 
-        btnFinishSale.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insertSale();
-            }
-        });
-
-        btnAlter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResumeSaleActivity.this, ResumeSaleActivity.class);
-                intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                finish();
-            }
-        });
         configToolbar("RESUMO VENDA", RegisterSalesActivity.class);
-    }
 
-    private void insertSale() {
-        SharedPreferencesUtil sp = SharedPreferencesUtil.instance(getApplicationContext());
-        ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
-        String getToken = sp.fetchValueString(StaticsKeysUtil.Token);
-        String auth = "Bearer " + getToken;
-
-        if(saleDataReceived == null){
-            ShowCustomToast.show(ResumeSaleActivity.this, "Por favor, preencha todos os campos e tente novamente.", "ERROR");
-            return;
-        }
-        String cpfClear = MasksUtil.unmask(saleDataReceived.getCpf());
-        SaleSerializable saleForSend = new SaleSerializable(
-                saleDataReceived.getName(),
-                cpfClear,
-                saleDataReceived.getEmail(),
-                saleDataReceived.getDescription(),
-                saleDataReceived.getQtdItems(),
-                saleDataReceived.getValueSale(),
-                saleDataReceived.getValueReceived(),
-                saleDataReceived.getChangeDue()
-        );
-        Call<SalesResponse> insertSaleCall = api.insertSale(saleForSend, auth);
-
-        insertSaleCall.enqueue(new Callback<SalesResponse>() {
-            @Override
-            public void onResponse(Call<SalesResponse> call, Response<SalesResponse> response) {
-                SalesResponse salesResponse = response.body();
-                if(response.isSuccessful()){
-                    ShowCustomToast.show(getApplicationContext(), salesResponse.getMessage(), "SUCESS");
-                    Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
-                    intent.putExtra("saleData", saleDataReceived);
-                    startActivity(intent);
-                } else {
-                    try {
-                        Gson gson = new Gson();
-                        SalesResponse errorData = gson.fromJson(response.errorBody().charStream(),
-                                SalesResponse.class);
-                        String getMessage = errorData.getMessage();
-                        ShowCustomToast.show(ResumeSaleActivity.this, getMessage, "ERROR");
-                    } catch (Exception e) {
-                        ShowCustomToast.show(getApplicationContext(), "Erro no servidor", "ERROR");
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SalesResponse> call, Throwable t) {
-                ShowCustomToast.show(getApplicationContext(),
-                        "Erro ao acessar o servidor, tente novamente.",
-                        "ERROR");
-            }
-        });
-
-    }
-
-    private void getDataSale() {
+        SaleSerializable data;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
+            data = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
         } else {
-            saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
+            data = (SaleSerializable) getIntent().getSerializableExtra("saleData");
         }
+        controller.loadData(data);
 
-        if (saleDataReceived != null) {
-            tvShowName.setText(saleDataReceived.getName());
-            tvShowCpf.setText(saleDataReceived.getCpf());
-            tvShowEmail.setText(saleDataReceived.getEmail());
+        btnFinishSale.setOnClickListener(v -> controller.finishSale());
 
-            String getValueReceived = String.valueOf(saleDataReceived.getValueReceived()).toString();
-            String getValueSale = String.valueOf(saleDataReceived.getValueSale()).toString();
-            String getChangeDue = String.valueOf(saleDataReceived.getChangeDue()).toString();
+        btnAlter.setOnClickListener(v -> navigateToRegister());
+    }
 
-            tvShowValueReceived.setText("R$ " + getValueReceived);
-            tvValueSale.setText("R$ " + getValueSale);
-            tvDueChange.setText("R$ " + getChangeDue);
-            String listItems = saleDataReceived.getDescription();
 
-            if (listItems != null || listItems.isEmpty()) {
-                String[] items = listItems.split("#");
+    @Override
+    public void showData(String name, String cpf, String email, String valSalue, String valReceived, String changeDue) {
+        tvShowName.setText(name);
+        tvShowCpf.setText(cpf);
+        tvShowEmail.setText(email);
+        tvValueSale.setText(valSalue);
+        tvShowValueReceived.setText(valReceived);
+        tvDueChange.setText(changeDue);
+    }
 
-                for (String nameItem : items) {
-                    ItemsSale itemForList = new ItemsSale(
-                            "R$ --",
-                            nameItem.trim()
-                    );
+    @Override
+    public void updateList(List<ItemsSale> items) {
+        this.itemsSale.clear();
+        this.itemsSale.addAll(items);
+        adapter.notifyDataSetChanged();
+    }
 
-                    itemsSale.add(itemForList);
-                }
+    @Override
+    public void showMessage(String msg, String type) {
+        ShowCustomToast.show(this, msg, type);
+    }
 
-            } else {
-                ShowCustomToast.show(ResumeSaleActivity.this, "Dados nulos, saia e tente novamente.", "ERROR");
-            }
+    @Override
+    public void navigateToReceipt(SaleSerializable sale) {
+        Intent intent = new Intent(ResumeSaleActivity.this, ReceiptActivity.class);
+        intent.putExtra("saleData", sale);
+        startActivity(intent);
+        finish();
+    }
 
-            adapter.notifyDataSetChanged();
-        } else {
-            ShowCustomToast.show(ResumeSaleActivity.this, "Dados nulos, saia e tente novamente.", "ERROR");
-        }
+    @Override
+    public void navigateToRegister() {
+        finish();
     }
 }

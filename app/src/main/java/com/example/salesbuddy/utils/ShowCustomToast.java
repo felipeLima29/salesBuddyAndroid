@@ -26,10 +26,10 @@ public class ShowCustomToast {
         text.setText(message);
 
         int colorResId = 0;
-        int iconResId;
+        int iconResId = 0;
 
         switch (type){
-            case "SUCESS":
+            case "SUCCESS":
                 colorResId = R.color.sucess;
                 break;
             case "ERROR":
@@ -37,6 +37,9 @@ public class ShowCustomToast {
                 break;
             case "WARNING":
                 colorResId = R.color.warning;
+                break;
+            default:
+                colorResId = R.color.error;
                 break;
         }
 
