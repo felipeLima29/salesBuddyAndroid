@@ -50,7 +50,6 @@ public class ShowCustomToast {
             container.setBackground(wrapped);
         }
 
-        // 6. Cria e exibe o Toast
         Toast toast = new Toast(context);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);

@@ -96,11 +96,9 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
         }
         View view = LayoutInflater.from(this).inflate(R.layout.item_dynamic_sale, containerProducts, false);
 
-        // Configura o botão de remover
         ImageButton btnRemove = view.findViewById(R.id.btnRemoveItem);
         EditText etItem = view.findViewById(R.id.etDynamicItem);
 
-        // Define o hint
         itemCount++;
         etItem.setHint("ITEM 0" + itemCount);
 
@@ -108,7 +106,6 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
             removeView(view);
         });
 
-        // Adiciona na tela
         containerProducts.addView(view);
     }
 

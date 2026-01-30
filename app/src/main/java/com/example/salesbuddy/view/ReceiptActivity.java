@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,14 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
+import com.example.salesbuddy.controller.ReceiptController;
 import com.example.salesbuddy.model.ItemsSale;
-import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
-import com.example.salesbuddy.model.api.ApiService;
-import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
-import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
+import com.example.salesbuddy.view.contracts.IReceiptView;
 import com.example.salesbuddy.view.dialog.MessageDialog;
 
 import java.io.File;
@@ -35,20 +32,13 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class ReceiptActivity extends IncludeToolbar {
+public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
     private TextView tvNameReceipt, tvCpfReceipt, tvEmailReceipt, tvValueReceivedReceipt, tvValueSaleReceipt, tvDueChangeReceipt;
     private AppCompatButton btnSendReceipt, btnBackReceipt;
     private ResumeAdapter adapter;
     private SaleSerializable saleDataReceived;
     private List<ItemsSale> itemsSale = new ArrayList<>();
+    private ReceiptController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,82 +59,36 @@ public class ReceiptActivity extends IncludeToolbar {
         tvDueChangeReceipt = findViewById(R.id.tvDueChange);
         btnSendReceipt = findViewById(R.id.btnSendReceipt);
         btnBackReceipt = findViewById(R.id.btnBackReceipt);
+
         RecyclerView rvItems = findViewById(R.id.rvItensVenda);
-
         ConstraintLayout layout = findViewById(R.id.layoutReceipt);
-
-        btnBackReceipt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegisterSalesActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        btnSendReceipt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String emailClient = saleDataReceived.getEmail();
-
-                if(emailClient == null || emailClient.isEmpty()) {
-                    ShowCustomToast.show(getApplicationContext(), "E-mail não informado", "ERROR");
-                }
-
-                Bitmap bitmap = getBitMapFromView(layout);
-                File file = saveBitMapToFile(bitmap);
-
-                if (file != null) {
-                    sendReceipt(file, emailClient);
-                } else {
-                    ShowCustomToast.show(getApplicationContext(), "Erro ao gerar imagem.", "ERROR");
-                }
-            }
-        });
 
         adapter = new ResumeAdapter(itemsSale, R.color.txInputSale);
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
 
-        getDataSale();
+        controller = new ReceiptController(this, this);
         configToolbar("COMPROVANTE", ResumeSaleActivity.class);
-    }
 
-    private void sendReceipt(File file, String email) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
+        } else {
+            saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
+        }
 
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/png"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("receipt", file.getName(), reqFile);
-        String getToken = SharedPreferencesUtil.instance(this).fetchValueString(StaticsKeysUtil.Token);
-        String token = "Bearer " + getToken;
+        controller.loadData(saleDataReceived);
 
-        ApiService api = RetrofitClient.createService(ApiService.class, getApplicationContext());
-        Call<ResponseBody> call = api.sendReceipt(body, email, token);
+        btnBackReceipt.setOnClickListener(v -> navigateToNewSale());
 
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    MessageDialog.show(ReceiptActivity.this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: ", email);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(ReceiptActivity.this, RegisterSalesActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }, 4000);
-
-                } else {
-                    ShowCustomToast.show(ReceiptActivity.this, "Erro ao enviar: " + response.code(), "ERROR");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                ShowCustomToast.show(ReceiptActivity.this, "Falha de conexão", "ERROR");
+        btnSendReceipt.setOnClickListener(v -> {
+            if(layout != null){
+                Bitmap bitmap = getBitMapFromView(layout);
+                File file = saveBitMapToFile(bitmap);
+                controller.sendReceipt(file);
+            } else {
+                ShowCustomToast.show(this, "Erro ao capturar tela", "ERROR");
             }
         });
-
     }
 
     private Bitmap getBitMapFromView(View view) {
@@ -177,41 +121,42 @@ public class ReceiptActivity extends IncludeToolbar {
         }
     }
 
-    private void getDataSale() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
-        } else {
-            saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
+    @Override
+    public void showData(String name, String cpf, String email, String valSalue, String valReceived, String changeDue) {
+        tvNameReceipt.setText(name);
+        tvCpfReceipt.setText(cpf);
+        tvEmailReceipt.setText(email);
+        tvValueSaleReceipt.setText(valSalue);
+        tvValueReceivedReceipt.setText(valReceived);
+        tvDueChangeReceipt.setText(changeDue);
+    }
+
+    @Override
+    public void updateList(List<ItemsSale> items) {
+        itemsSale.clear();
+
+        if (items != null) {
+            itemsSale.addAll(items);
         }
-        if (saleDataReceived != null) {
-            tvNameReceipt.setText(saleDataReceived.getName());
-            tvCpfReceipt.setText(saleDataReceived.getCpf());
-            tvEmailReceipt.setText(saleDataReceived.getEmail());
+        adapter.notifyDataSetChanged();
+    }
 
-            String getValueReceived = String.valueOf(saleDataReceived.getValueReceived()).toString();
-            String getValueSale = String.valueOf(saleDataReceived.getValueSale()).toString();
-            String getChangeDue = String.valueOf(saleDataReceived.getChangeDue()).toString();
+    @Override
+    public void showMessage(String msg, String type) {
+        ShowCustomToast.show(this, msg, type);
+    }
 
-            tvValueReceivedReceipt.setText("R$ " + getValueReceived);
-            tvValueSaleReceipt.setText("R$ " + getValueSale);
-            tvDueChangeReceipt.setText("R$ " + getChangeDue);
+    @Override
+    public void showSuccessAndNavigate(String email) {
+        MessageDialog.show(this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: ", email);
+        new Handler().postDelayed(this::navigateToNewSale, 3500);
+    }
 
-            String listItems = saleDataReceived.getDescription();
-            if (listItems != null || listItems.isEmpty()) {
-                String[] items = listItems.split("#");
-
-                for (String nameItem : items) {
-                    ItemsSale itemsForList = new ItemsSale(
-                            "R$ --",
-                            nameItem.trim()
-                    );
-                    itemsSale.add(itemsForList);
-                }
-                adapter.notifyDataSetChanged();
-            } else {
-                Log.d("DEBUG_LISTA", "Erro");
-            }
-
-        }
+    @Override
+    public void navigateToNewSale() {
+        Intent intent = new Intent(getApplicationContext(), RegisterSalesActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

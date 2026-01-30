@@ -71,7 +71,6 @@ public class LoginController {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                view.hideLoading();
                 Log.e("ERROR", "onFailure: " + t.getMessage());
                 view.onLoginError("Falha na conexão. Verifique sua internet.");
             }
