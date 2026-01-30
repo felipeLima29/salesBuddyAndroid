@@ -1,4 +1,4 @@
-package com.example.salesbuddy.view;
+package com.example.salesbuddy.view.contracts;
 
 public interface ILoginView {
     void showLoading();

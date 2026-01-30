@@ -18,13 +18,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
+import com.example.salesbuddy.controller.RegisterController;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
+import com.example.salesbuddy.view.contracts.IRegisterView;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-public class RegisterSalesActivity extends IncludeToolbar {
+public class RegisterSalesActivity extends IncludeToolbar implements IRegisterView{
 
     private AppCompatButton btnRegister;
     private ImageButton btnAddItem;
@@ -32,6 +36,8 @@ public class RegisterSalesActivity extends IncludeToolbar {
     private EditText txClientName, txCpf, txEmail, txItemName, txSaleValue, txReceivedValue;
     private int itemCount = 1;
     private final int MAX_ITEMS = 4;
+
+    private RegisterController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +65,26 @@ public class RegisterSalesActivity extends IncludeToolbar {
         txSaleValue.addTextChangedListener(MasksUtil.money(txSaleValue));
         txReceivedValue.addTextChangedListener(MasksUtil.money(txReceivedValue));
 
+        controller = new RegisterController((IRegisterView) this);
+
         btnAddItem.setOnClickListener(v -> addNewItemInput());
-        btnRegister.setOnClickListener(v -> registerSale());
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<String> itemsExtra = getItemsDynamics();
+
+                controller.processSale(
+                        txClientName.getText().toString(),
+                        txCpf.getText().toString(),
+                        txEmail.getText().toString(),
+                        txSaleValue.getText().toString(),
+                        txReceivedValue.getText().toString(),
+                        txItemName.getText().toString(),
+                        itemsExtra
+                );
+            }
+        });
 
         configToolbar("REGISTRAR VENDA", HomeActivity.class);
     }
@@ -94,73 +118,25 @@ public class RegisterSalesActivity extends IncludeToolbar {
         Toast.makeText(this, "Item removido", Toast.LENGTH_SHORT).show();
     }
 
-
-    private void registerSale() {
-        String name = txClientName.getText().toString();
-        String cpf = txCpf.getText().toString();
-        String email = txEmail.getText().toString();
-        String valueSaleString = MasksUtil.unmaskPrice(txSaleValue.getText().toString());
-        String valueReceivedString = MasksUtil.unmaskPrice(txReceivedValue.getText().toString());
-
-        if (name.isEmpty() || valueSaleString.isEmpty() || valueReceivedString.isEmpty()) {
-            ShowCustomToast.show(RegisterSalesActivity.this, "Preencha todos os campos.", "ERROR");
-            return;
+    private List<String> getItemsDynamics() {
+        List<String> lista = new ArrayList<>();
+        for (int i = 0; i < containerProducts.getChildCount(); i++) {
+            View viewLinha = containerProducts.getChildAt(i);
+            EditText et = viewLinha.findViewById(R.id.etDynamicItem);
+            lista.add(et.getText().toString().trim());
         }
-        if (cpf.length() < 14) {
-            ShowCustomToast.show(RegisterSalesActivity.this, "Digite um cpf válido.", "ERROR");
-            return;
-        }
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            ShowCustomToast.show(RegisterSalesActivity.this, "Digite um e-mail válido.", "ERROR");
-            return;
-        }
+        return lista;
+    }
 
-        try {
-            BigDecimal valueSale = new BigDecimal(valueSaleString);
-            BigDecimal valueReceived = new BigDecimal(valueReceivedString);
+    @Override
+    public void showError(String message) {
+        ShowCustomToast.show(RegisterSalesActivity.this, message, "ERROR");
+    }
 
-            if(valueReceived.compareTo(valueSale) < 0){
-                ShowCustomToast.show(RegisterSalesActivity.this, "Valor recebido menor que valor da venda", "ERROR");
-                return;
-            }
-            BigDecimal changeDue = valueReceived.subtract(valueSale);
-
-            int qtdItems = 0;
-            StringBuilder allDescriptions = new StringBuilder();
-
-            String textFix = txItemName.getText().toString().trim();
-            if (!textFix.isEmpty()) {
-                allDescriptions.append(textFix);
-                qtdItems++;
-            }
-
-            // Loop para pegar os itens dinâmicos do container
-            for (int i = 0; i < containerProducts.getChildCount(); i++) {
-                View dynamicRow = containerProducts.getChildAt(i);
-                EditText etDynamic = dynamicRow.findViewById(R.id.etDynamicItem);
-
-                String text = etDynamic.getText().toString().trim();
-                if (!text.isEmpty()) {
-                    allDescriptions.append("# ").append(text);
-                    qtdItems++;
-                }
-            }
-
-            String finalDescription = allDescriptions.toString();
-
-            SaleSerializable saleSerializable = new SaleSerializable(name,
-                    cpf, email,
-                    finalDescription,
-                    qtdItems, valueSale,
-                    valueReceived, changeDue);
-            Intent intent = new Intent(RegisterSalesActivity.this, ResumeSaleActivity.class);
-            intent.putExtra("saleData", saleSerializable);
-            startActivity(intent);
-        } catch (NumberFormatException e) {
-            ShowCustomToast.show(RegisterSalesActivity.this,
-                    "Formato de valor inválido. Use ponto (.) para centavos.",
-                    "ERROR");
-        }
-
+    @Override
+    public void gotToResume(SaleSerializable sale) {
+        Intent intent = new Intent(this, ResumeSaleActivity.class);
+        intent.putExtra("saleData", sale);
+        startActivity(intent);
     }
 }

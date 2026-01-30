@@ -9,7 +9,7 @@ import com.example.salesbuddy.model.request.LoginRequest;
 import com.example.salesbuddy.model.request.LoginResponse;
 import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.StaticsKeysUtil;
-import com.example.salesbuddy.view.ILoginView;
+import com.example.salesbuddy.view.contracts.ILoginView;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
