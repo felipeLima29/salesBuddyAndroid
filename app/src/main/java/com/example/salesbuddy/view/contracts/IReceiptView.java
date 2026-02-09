@@ -10,4 +10,5 @@ public interface IReceiptView {
     void showMessage(String msg, String type);
     void showSuccessAndNavigate(String email);
     void navigateToNewSale();
+    void showLoading(boolean isLoading);
 }

@@ -73,6 +73,8 @@ public class ReceiptController {
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/png"), arquive);
         MultipartBody.Part body = MultipartBody.Part.createFormData("receipt", arquive.getName(), reqFile);
 
+        view.showLoading(true);
+
         String token = "Bearer " + SharedPreferencesUtil.instance(context).fetchValueString(StaticsKeysUtil.Token);
         ApiService api = RetrofitClient.createService(ApiService.class, context);
 
@@ -80,6 +82,7 @@ public class ReceiptController {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                view.showLoading(false);
                 if(response.isSuccessful()) {
                     view.showSuccessAndNavigate(currentSale.getEmail());
                 } else {

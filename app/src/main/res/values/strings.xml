@@ -43,6 +43,7 @@
     <string name="cpf_receipt">CPF</string>
     <string name="email_receipt">E-mail</string>
     <string name="itm">Itm</string>
+    <string name="sending_receipt">Enviando...</string>
     <string name="description_receipt">Descrição</string>
     <string name="value_received_receipt">Valor Recebido</string>
     <string name="value_sale_receipt">Valor Venda</string>
