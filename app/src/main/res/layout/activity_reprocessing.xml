@@ -28,7 +28,7 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/button_register_sale"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Reprocessar"
+        android:text="@string/reprocess"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

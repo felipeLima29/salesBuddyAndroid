@@ -42,7 +42,6 @@ public class IncludeToolbar extends AppCompatActivity {
                     finish();
                 } else {
                     Intent intent = new Intent(v.getContext(), targetActivity);
-
                     intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     finish();
@@ -56,7 +55,6 @@ public class IncludeToolbar extends AppCompatActivity {
 
         if (optRegisterSaleToolbar != null) {
             optRegisterSaleToolbar.setOnClickListener(v -> {
-                Log.d("INFO", "Botao clicado");
                 Intent intent = new Intent(v.getContext(), RegisterSalesActivity.class);
                 startActivity(intent);
             });
@@ -64,7 +62,6 @@ public class IncludeToolbar extends AppCompatActivity {
 
         if (optReprocessToolbar != null) {
             optReprocessToolbar.setOnClickListener(v -> {
-                Log.d("INFO", "Botao clicado");
                 Intent intent = new Intent(v.getContext(), ReprocessingActivity.class);
                 startActivity(intent);
             });

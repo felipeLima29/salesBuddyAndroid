@@ -68,7 +68,7 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
         rvItems.setAdapter(adapter);
 
         controller = new ReceiptController(this, this);
-        configToolbar("COMPROVANTE", ResumeSaleActivity.class);
+        configToolbar(getString(R.string.receipt), ResumeSaleActivity.class);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             saleDataReceived = getIntent().getSerializableExtra("saleData", SaleSerializable.class);
@@ -86,7 +86,7 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
                 File file = saveBitMapToFile(bitmap);
                 controller.sendReceipt(file);
             } else {
-                ShowCustomToast.show(this, "Erro ao capturar tela", "ERROR");
+                ShowCustomToast.show(this, getString(R.string.error_print), "ERROR");
             }
         });
     }
@@ -148,7 +148,7 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
 
     @Override
     public void showSuccessAndNavigate(String email) {
-        MessageDialog.show(this, "COMPROVANTE ENVIADO COM SUCESSO PARA O EMAIL: ", email);
+        MessageDialog.show(this, getString(R.string.sucess_send_receipt), email);
         new Handler().postDelayed(this::navigateToNewSale, 3500);
     }
 

@@ -3,6 +3,7 @@ package com.example.salesbuddy.controller;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.LoginRequest;
@@ -27,7 +28,7 @@ public class LoginController {
 
     public void doLogin(String usuario, String password){
         if (usuario.isEmpty() || password.isEmpty()) {
-            view.onLoginError("Preencha todos os campos");
+            view.onLoginError(context.getString(R.string.fields_null));
             return;
         }
 
@@ -50,7 +51,7 @@ public class LoginController {
                     if (loginResponse.getLogin()) {
                         view.onLoginSuccess();
                     } else {
-                        view.onLoginError("Email e/ou senha inválidas.");
+                        view.onLoginError(String.valueOf(R.string.data_invalid));
                     }
                 } else {
                     try {
@@ -59,10 +60,10 @@ public class LoginController {
                             LoginResponse errorData = gson.fromJson(response.errorBody().charStream(), LoginResponse.class);
                             view.onLoginError(errorData.getMessage());
                         } else {
-                            view.onLoginError("Erro desconhecido no servidor");
+                            view.onLoginError(context.getString(R.string.error_server));
                         }
                     } catch (Exception e) {
-                        view.onLoginError("Erro ao processar resposta do servidor");
+                        view.onLoginError(context.getString(R.string.error_process_response));
                         e.printStackTrace();
                     }
                 }
@@ -71,8 +72,7 @@ public class LoginController {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Log.e("ERROR", "onFailure: " + t.getMessage());
-                view.onLoginError("Falha na conexão. Verifique sua internet.");
+                view.onLoginError(context.getString(R.string.error_conex));
             }
         });
 

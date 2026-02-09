@@ -75,7 +75,7 @@ public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
 
         controller = new ResumeController((IResumeView) this, this);
 
-        configToolbar("RESUMO VENDA", RegisterSalesActivity.class);
+        configToolbar(getString(R.string.resume_sale), RegisterSalesActivity.class);
 
         SaleSerializable data;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {

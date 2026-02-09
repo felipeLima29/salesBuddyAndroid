@@ -38,7 +38,7 @@
         android:layout_height="60dp"
         android:background="@drawable/button_home"
         android:fontFamily="@font/font_family_montserrat"
-        android:text="REGISTRAR VENDAS"
+        android:text="@string/register_sale"
         android:textColor="@color/blue"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -53,7 +53,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/button_home"
         android:fontFamily="@font/font_family_montserrat"
-        android:text="REPROCESSAR"
+        android:text="@string/reprocess"
         android:textColor="@color/blue"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -97,7 +97,7 @@
                 android:backgroundTint="@color/whiteSmoke"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="10dp"
-                android:text="REGISTRAR VENDA"
+                android:text="@string/register_sale"
                 android:textColor="@color/blue"
                 android:textSize="14sp" />
 
@@ -113,7 +113,7 @@
                 android:backgroundTint="@color/whiteSmoke"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="10dp"
-                android:text="REPROCESSAR"
+                android:text="@string/reprocess"
                 android:textColor="@color/blue"
                 android:textSize="14sp" />
 
@@ -129,7 +129,7 @@
                 android:backgroundTint="@color/whiteSmoke"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="10dp"
-                android:text="LOG OUT"
+                android:text="@string/logout"
                 android:textColor="@color/blue"
                 android:textSize="14sp" />
         </LinearLayout>

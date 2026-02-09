@@ -2,6 +2,7 @@ package com.example.salesbuddy.controller;
 
 import android.content.Context;
 
+import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
@@ -34,7 +35,7 @@ public class ReceiptController {
 
     public void loadData(SaleSerializable data) {
         if (data == null) {
-            view.showMessage("Erro ao carregar dados.", "ERROR");
+            view.showMessage(context.getString(R.string.error_load_data), "ERROR");
             return;
         }
         this.currentSale = data;
@@ -62,11 +63,11 @@ public class ReceiptController {
 
     public void sendReceipt(File arquive) {
         if (currentSale == null || currentSale.getEmail() == null || currentSale.getEmail().isEmpty()) {
-            view.showMessage("E-mail do cliente não encontrado.", "ERROR");
+            view.showMessage(context.getString(R.string.email_not_found), "ERROR");
             return;
         }
         if (arquive == null) {
-            view.showMessage("Erro ao gerar imagem do comprovante.", "ERROR");
+            view.showMessage(context.getString(R.string.error_send_receipt), "ERROR");
             return;
         }
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/png"), arquive);
@@ -82,13 +83,13 @@ public class ReceiptController {
                 if(response.isSuccessful()) {
                     view.showSuccessAndNavigate(currentSale.getEmail());
                 } else {
-                    view.showMessage("Erro ao enviar: " + response.code(), "ERROR");
+                    view.showMessage(context.getString(R.string.error_send) + response.code(), "ERROR");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                view.showMessage("Falha de conexão.", "ERROR");
+                view.showMessage(context.getString(R.string.error_conex), "ERROR");
             }
         });
 

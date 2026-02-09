@@ -49,7 +49,7 @@ public class ReprocessingActivity extends IncludeToolbar {
         recyclerView.setAdapter(adapter);
 
         btnReprocess.setOnClickListener(v -> startReprocessingSimulation());
-        configToolbar("REPROCESSAMENTO", HomeActivity.class);
+        configToolbar(getString(R.string.reprocess_layout), HomeActivity.class);
     }
 
     private void createMockData() {
@@ -64,7 +64,7 @@ public class ReprocessingActivity extends IncludeToolbar {
     private void startReprocessingSimulation() {
 
         if(!alreadyHaveError){
-            MessageDialog.show(ReprocessingActivity.this, "PROBLEMAS ENCONTRADOS AO REPROCESSAR ALGUMAS VENDAS, TENTE NOVAMENTE", null);
+            MessageDialog.show(ReprocessingActivity.this, getString(R.string.problems_reprocess), null);
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
                 if (mockList.size() > 2) {
@@ -75,7 +75,7 @@ public class ReprocessingActivity extends IncludeToolbar {
                 adapter.notifyDataSetChanged();
             }, 2000);
         } else {
-            MessageDialog.show(ReprocessingActivity.this, "REPROCESSAMENTO EFETUADO COM SUCESSO", null);
+            MessageDialog.show(ReprocessingActivity.this, getString(R.string.sucess_reprocess), null);
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 for (ReprocessingItem item : mockList){
                     item.setReprocessed(true);

@@ -2,6 +2,7 @@ package com.example.salesbuddy.controller;
 
 import android.content.Context;
 
+import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
@@ -32,7 +33,7 @@ public class ResumeController {
 
     public void loadData(SaleSerializable saleData) {
         if (saleData == null) {
-            view.showMessage("Dados nulos, saia e tente novamente.", "ERROR");
+            view.showMessage(context.getString(R.string.data_null), "ERROR");
             return;
         }
         this.currentSale = saleData;
@@ -91,14 +92,14 @@ public class ResumeController {
                         SalesResponse error = gson.fromJson(response.errorBody().charStream(), SalesResponse.class);
                         view.showMessage(error.getMessage(), "ERROR");
                     } catch (Exception e) {
-                        view.showMessage("Erro no servidor", "ERROR");
+                        view.showMessage(context.getString(R.string.error_server), "ERROR");
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<SalesResponse> call, Throwable t) {
-                view.showMessage("Erro de conexão", "ERROR");
+                view.showMessage(context.getString(R.string.error_conex), "ERROR");
             }
         });
 

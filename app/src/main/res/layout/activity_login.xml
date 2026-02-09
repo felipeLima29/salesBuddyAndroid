@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
-            android:hint="Usuário"
+            android:hint="@string/user"
             android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,9 +85,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:fontFamily="@font/montserrat_regular"
-            android:hint="Senha" />
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +98,7 @@
         android:layout_marginBottom="120dp"
         android:background="@drawable/button_login"
         android:fontFamily="@font/montserrat_bold"
-        android:text="LOGIN"
+        android:text="@string/login"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

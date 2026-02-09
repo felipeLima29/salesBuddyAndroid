@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:fontFamily="@font/montserrat_bold"
-        android:text="REGISTRAR VENDA"
+        android:text="@string/register_sale"
         android:textAllCaps="true"
         android:textColor="@color/blue"
         android:textSize="14sp"

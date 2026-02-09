@@ -65,7 +65,7 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
         txSaleValue.addTextChangedListener(MasksUtil.money(txSaleValue));
         txReceivedValue.addTextChangedListener(MasksUtil.money(txReceivedValue));
 
-        controller = new RegisterController((IRegisterView) this);
+        controller = new RegisterController((IRegisterView) this, this);
 
         btnAddItem.setOnClickListener(v -> addNewItemInput());
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -86,12 +86,12 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
             }
         });
 
-        configToolbar("REGISTRAR VENDA", HomeActivity.class);
+        configToolbar(getString(R.string.register_sale), HomeActivity.class);
     }
 
     private void addNewItemInput() {
         if (itemCount >= MAX_ITEMS) {
-            ShowCustomToast.show(RegisterSalesActivity.this, "Máximo de 4 itens atingidos", "ERROR");
+            ShowCustomToast.show(RegisterSalesActivity.this, getString(R.string.max_itens), "ERROR");
             return;
         }
         View view = LayoutInflater.from(this).inflate(R.layout.item_dynamic_sale, containerProducts, false);
@@ -112,7 +112,7 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
     private void removeView(View view) {
         containerProducts.removeView(view);
         itemCount--;
-        ShowCustomToast.show(this, "Item removido", "SUCCESS");
+        ShowCustomToast.show(this, getString(R.string.remove_iten), "SUCCESS");
     }
 
     private List<String> getItemsDynamics() {

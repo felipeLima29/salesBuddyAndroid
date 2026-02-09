@@ -1,7 +1,9 @@
 package com.example.salesbuddy.controller;
 
+import android.content.Context;
 import android.util.Patterns;
 
+import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.view.contracts.IRegisterView;
@@ -11,9 +13,11 @@ import java.util.List;
 
 public class RegisterController {
     private final IRegisterView view;
+    private final Context context;
 
-    public RegisterController(IRegisterView view) {
+    public RegisterController(IRegisterView view, Context context) {
         this.view = view;
+        this.context = context;
     }
 
     public void processSale(String name, String cpf, String email,
@@ -25,17 +29,17 @@ public class RegisterController {
         String itemPrincipal = item.trim();
 
         if (name.isEmpty() || valueSaleString.isEmpty() || valueReceivedString.isEmpty()) {
-            view.showError("Preencha todos os campos.");
+            view.showError(context.getString(R.string.fields_null));
             return;
         }
 
         if (cpf.length() < 14) {
-            view.showError("Digite um CPF válido.");
+            view.showError(context.getString(R.string.invalid_cpf));
             return;
         }
 
         if (itemPrincipal.isEmpty()) {
-            view.showError("O nome do primeiro item é obrigatório.");
+            view.showError(context.getString(R.string.first_item_obrig));
             return;
         }
 
@@ -50,7 +54,7 @@ public class RegisterController {
         }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            view.showError("Digite um e-mail válido.");
+            view.showError(context.getString(R.string.invalid_email));
             return;
         }
 
@@ -59,11 +63,11 @@ public class RegisterController {
             BigDecimal valueReceived = new BigDecimal(valueReceivedString);
 
             if (valueReceived.compareTo(valueSale) < 0) {
-                view.showError("Valor recebido menor que valor da venda");
+                view.showError(context.getString(R.string.value_received));
                 return;
             }
             if (valueSale.compareTo(BigDecimal.ZERO) <= 0) {
-                view.showError("O valor da venda deve ser maior que zero.");
+                view.showError(context.getString(R.string.value_sale));
                 return;
             }
 
@@ -95,7 +99,7 @@ public class RegisterController {
             view.gotToResume(saleSerializable);
 
         } catch (Exception e) {
-            view.showError("Erro no formato de valores.");
+            view.showError(context.getString(R.string.error_format_values));
         }
     }
 }
