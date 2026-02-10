@@ -20,7 +20,6 @@ public interface ApiService {
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
     @POST("/insertSale")
     Call<SalesResponse> insertSale(@Body SaleSerializable sales, @Header("Authorization") String token);
-
     @Multipart
     @POST("/sendReceipt")
     Call<ResponseBody> sendReceipt(

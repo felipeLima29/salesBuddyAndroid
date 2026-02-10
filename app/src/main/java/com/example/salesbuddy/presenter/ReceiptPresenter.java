@@ -11,6 +11,7 @@ import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -65,7 +66,7 @@ public class ReceiptPresenter {
             view.showReceiptSendError();
             return;
         }
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/png"), arquive);
+        RequestBody reqFile = RequestBody.create(arquive, MediaType.parse("image/png"));
         MultipartBody.Part body = MultipartBody.Part.createFormData("receipt", arquive.getName(), reqFile);
 
         view.showLoading(true);
