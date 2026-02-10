@@ -2,37 +2,34 @@ package com.example.salesbuddy.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
 import com.example.salesbuddy.presenter.RegisterPresenter;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
+import com.example.salesbuddy.view.adapter.RegisterItemAdapter;
 import com.example.salesbuddy.view.contracts.IRegisterView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterSalesActivity extends IncludeToolbar implements IRegisterView{
+public class RegisterSalesActivity extends IncludeToolbar implements IRegisterView {
 
     private AppCompatButton btnRegister;
     private ImageButton btnAddItem;
-    private LinearLayout containerProducts;
     private EditText txClientName, txCpf, txEmail, txItemName, txSaleValue, txReceivedValue;
-    private int itemCount = 1;
-    private final int MAX_ITEMS = 4;
-
+    private RecyclerView rvDynamicItems;
+    private RegisterItemAdapter adapter;
     private RegisterPresenter presenter;
 
     @Override
@@ -55,17 +52,25 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
         txReceivedValue = findViewById(R.id.txReceivedValue);
         btnRegister = findViewById(R.id.btnRegiSter);
         btnAddItem = findViewById(R.id.btnAddItem);
-        containerProducts = findViewById(R.id.containerProducts);
+        rvDynamicItems = findViewById(R.id.rvDynamicItems);
 
         txCpf.addTextChangedListener(MasksUtil.mask(MasksUtil.FORMAT_CPF, txCpf));
         txSaleValue.addTextChangedListener(MasksUtil.money(txSaleValue));
         txReceivedValue.addTextChangedListener(MasksUtil.money(txReceivedValue));
 
+        setupRecyclerView();
+
         presenter = new RegisterPresenter(this);
 
-        btnAddItem.setOnClickListener(v -> addNewItemInput());
+        btnAddItem.setOnClickListener(v -> {
+            if (adapter.getItemCount() >= 4) {
+                ShowCustomToast.show(this, getString(R.string.max_itens), "ERROR");
+            } else {
+                adapter.addNewItem();
+            }
+        });
         btnRegister.setOnClickListener(v -> {
-            List<String> itemsExtra = getItemsDynamics();
+            List<String> itemsExtra = adapter.getAllItems();
 
             presenter.processSale(
                     txClientName.getText().toString().trim(),
@@ -81,40 +86,10 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
         configToolbar(getString(R.string.register_sale), HomeActivity.class);
     }
 
-    private void addNewItemInput() {
-        if (itemCount >= MAX_ITEMS) {
-            ShowCustomToast.show(RegisterSalesActivity.this, getString(R.string.max_itens), "ERROR");
-            return;
-        }
-        View view = LayoutInflater.from(this).inflate(R.layout.item_dynamic_sale, containerProducts, false);
-
-        ImageButton btnRemove = view.findViewById(R.id.btnRemoveItem);
-        EditText etItem = view.findViewById(R.id.etDynamicItem);
-
-        itemCount++;
-        etItem.setHint("ITEM 0" + itemCount);
-
-        btnRemove.setOnClickListener(v -> {
-            removeView(view);
-        });
-
-        containerProducts.addView(view);
-    }
-
-    private void removeView(View view) {
-        containerProducts.removeView(view);
-        itemCount--;
-        ShowCustomToast.show(this, getString(R.string.remove_iten), "SUCCESS");
-    }
-
-    private List<String> getItemsDynamics() {
-        List<String> lista = new ArrayList<>();
-        for (int i = 0; i < containerProducts.getChildCount(); i++) {
-            View viewLinha = containerProducts.getChildAt(i);
-            EditText et = viewLinha.findViewById(R.id.etDynamicItem);
-            lista.add(et.getText().toString().trim());
-        }
-        return lista;
+    private void setupRecyclerView() {
+        adapter = new RegisterItemAdapter();
+        rvDynamicItems.setLayoutManager(new LinearLayoutManager(this));
+        rvDynamicItems.setAdapter(adapter);
     }
 
     @Override

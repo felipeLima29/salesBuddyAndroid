@@ -113,11 +113,10 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/containerProducts"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDynamicItems"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
                     android:orientation="vertical" />
 
                 <EditText
