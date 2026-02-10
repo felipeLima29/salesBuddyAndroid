@@ -13,10 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
-import com.example.salesbuddy.presenter.ResumeController;
+import com.example.salesbuddy.model.RetrofitClient;
+import com.example.salesbuddy.model.api.ApiService;
+import com.example.salesbuddy.presenter.ResumePresenter;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.SaleSerializable;
+import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
+import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
 import com.example.salesbuddy.view.contracts.IResumeView;
 
@@ -29,7 +33,7 @@ public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
     private ResumeAdapter adapter;
     private List<ItemsSale> itemsSale = new ArrayList<>();
 
-    private ResumeController controller;
+    private ResumePresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,9 @@ public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
 
-        controller = new ResumeController(this, this);
+        ApiService apiService = RetrofitClient.createService(ApiService.class, this);
+
+        presenter = new ResumePresenter(this, apiService);
 
         configToolbar(getString(R.string.resume_sale), RegisterSalesActivity.class);
 
@@ -66,9 +72,11 @@ public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
         } else {
             data = (SaleSerializable) getIntent().getSerializableExtra("saleData");
         }
-        controller.loadData(data);
-
-        btnFinishSale.setOnClickListener(v -> controller.finishSale());
+        presenter.loadData(data);
+        btnFinishSale.setOnClickListener(v -> {
+            String token = SharedPreferencesUtil.instance(this).fetchValueString(StaticsKeysUtil.Token);
+            presenter.finishSale(token);
+        });
 
         btnAlter.setOnClickListener(v -> navigateToRegister());
     }
@@ -92,8 +100,28 @@ public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
     }
 
     @Override
-    public void showMessage(String msg, String type) {
-        ShowCustomToast.show(this, msg, type);
+    public void showEmptyFieldsError() {
+        ShowCustomToast.show(this, getString(R.string.fields_null), "ERROR");
+    }
+
+    @Override
+    public void showOnRegisterSuccess() {
+        ShowCustomToast.show(this, getString(R.string.sucess_register_sale), "SUCCESS");
+    }
+
+    @Override
+    public void showOnRegisterError(String error) {
+        ShowCustomToast.show(this, error, "ERROR");
+    }
+
+    @Override
+    public void showConnectionError() {
+        ShowCustomToast.show(this, getString(R.string.error_conex), "ERROR");
+    }
+
+    @Override
+    public void showApiError() {
+        ShowCustomToast.show(this, getString(R.string.error_server), "ERROR");
     }
 
     @Override

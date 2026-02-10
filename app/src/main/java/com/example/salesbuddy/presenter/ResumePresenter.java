@@ -1,16 +1,10 @@
 package com.example.salesbuddy.presenter;
 
-import android.content.Context;
-
-import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
-import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.SalesResponse;
 import com.example.salesbuddy.utils.MasksUtil;
-import com.example.salesbuddy.utils.SharedPreferencesUtil;
-import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.contracts.IResumeView;
 import com.google.gson.Gson;
 
@@ -21,19 +15,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ResumeController {
+public class ResumePresenter {
     private final IResumeView view;
-    private final Context context;
+    private final ApiService apiService;
     private SaleSerializable currentSale;
 
-    public ResumeController(IResumeView view, Context context) {
+    public ResumePresenter(IResumeView view, ApiService apiService) {
         this.view = view;
-        this.context = context;
+        this.apiService = apiService;
     }
 
     public void loadData(SaleSerializable saleData) {
         if (saleData == null) {
-            view.showMessage(context.getString(R.string.data_null), "ERROR");
+            view.showEmptyFieldsError();
             return;
         }
         this.currentSale = saleData;
@@ -58,12 +52,9 @@ public class ResumeController {
 
     }
 
-    public void finishSale() {
+    public void finishSale(String token) {
         if (currentSale == null) return;
 
-        SharedPreferencesUtil sp = SharedPreferencesUtil.instance(context);
-        ApiService api = RetrofitClient.createService(ApiService.class, context);
-        String token = sp.fetchValueString(StaticsKeysUtil.Token);
         String auth = "Bearer " + token;
 
         String cpfClear = MasksUtil.unmask(currentSale.getCpf());
@@ -79,27 +70,27 @@ public class ResumeController {
                 currentSale.getChangeDue()
         );
 
-        Call<SalesResponse> call = api.insertSale(saleForSend, auth);
+        Call<SalesResponse> call = apiService.insertSale(saleForSend, auth);
         call.enqueue(new Callback<SalesResponse>() {
             @Override
             public void onResponse(Call<SalesResponse> call, Response<SalesResponse> response) {
                 if (response.isSuccessful()) {
-                    view.showMessage(response.body().getMessage(), "SUCCESS");
+                    view.showOnRegisterSuccess();
                     view.navigateToReceipt(currentSale);
                 } else {
                     try {
                         Gson gson = new Gson();
                         SalesResponse error = gson.fromJson(response.errorBody().charStream(), SalesResponse.class);
-                        view.showMessage(error.getMessage(), "ERROR");
+                        view.showOnRegisterError(String.valueOf(error));
                     } catch (Exception e) {
-                        view.showMessage(context.getString(R.string.error_server), "ERROR");
+                        view.showApiError();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<SalesResponse> call, Throwable t) {
-                view.showMessage(context.getString(R.string.error_conex), "ERROR");
+                view.showConnectionError();
             }
         });
 

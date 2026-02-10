@@ -1,9 +1,7 @@
 package com.example.salesbuddy.presenter;
 
-import android.content.Context;
 import android.util.Patterns;
 
-import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.view.contracts.IRegisterView;
@@ -11,13 +9,13 @@ import com.example.salesbuddy.view.contracts.IRegisterView;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class RegisterController {
+public class RegisterPresenter {
     private final IRegisterView view;
-    private final Context context;
+    private static final String EMAIL_PATTERN =
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
-    public RegisterController(IRegisterView view, Context context) {
+    public RegisterPresenter(IRegisterView view) {
         this.view = view;
-        this.context = context;
     }
 
     public void processSale(String name, String cpf, String email,
@@ -29,17 +27,17 @@ public class RegisterController {
         String itemPrincipal = item.trim();
 
         if (name.isEmpty() || valueSaleString.isEmpty() || valueReceivedString.isEmpty()) {
-            view.showError(context.getString(R.string.fields_null));
+            view.showEmptyFieldsError();
             return;
         }
 
         if (cpf.length() < 14) {
-            view.showError(context.getString(R.string.invalid_cpf));
+            view.showInvalidCpfError();
             return;
         }
 
         if (itemPrincipal.isEmpty()) {
-            view.showError(context.getString(R.string.first_item_obrig));
+            view.showFirstItemRequiredError();
             return;
         }
 
@@ -47,14 +45,14 @@ public class RegisterController {
             for (int i = 0; i < itemsExtra.size(); i++) {
                 String itemExtra = itemsExtra.get(i);
                 if (itemExtra.isEmpty()) {
-                    view.showError("O Item extra nº " + (i + 1) + " está vazio. Preencha ou remova a linha.");
+                    view.showExtraItemEmptyError(i + 1);
                     return;
                 }
             }
         }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            view.showError(context.getString(R.string.invalid_email));
+            view.showInvalidEmailError();
             return;
         }
 
@@ -63,11 +61,11 @@ public class RegisterController {
             BigDecimal valueReceived = new BigDecimal(valueReceivedString);
 
             if (valueReceived.compareTo(valueSale) < 0) {
-                view.showError(context.getString(R.string.value_received));
+                view.showReceivedValueLowerError();
                 return;
             }
             if (valueSale.compareTo(BigDecimal.ZERO) <= 0) {
-                view.showError(context.getString(R.string.value_sale));
+                view.showSaleValueInvalidError();
                 return;
             }
 
@@ -99,7 +97,7 @@ public class RegisterController {
             view.gotToResume(saleSerializable);
 
         } catch (Exception e) {
-            view.showError(context.getString(R.string.error_format_values));
+            view.showDataFormatError();
         }
     }
 }

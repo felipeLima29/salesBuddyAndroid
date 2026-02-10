@@ -19,6 +19,7 @@
     <string name="value_sale_high_key">VALOR VENDA</string>
     <string name="value_received_high_key">VALOR RECEBIDO</string>
     <string name="go_resume">IR PARA RESUMO</string>
+    <string name="sucess_register_sale">Venda inserida com sucesso.</string>
     <string name="alter">ALTERAR</string>
     <string name="finish">FINALIZAR</string>
     <string name="remove_iten">Item removido.</string>

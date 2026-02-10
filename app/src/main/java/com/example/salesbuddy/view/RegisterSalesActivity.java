@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
-import com.example.salesbuddy.presenter.RegisterController;
+import com.example.salesbuddy.presenter.RegisterPresenter;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
@@ -33,7 +33,7 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
     private int itemCount = 1;
     private final int MAX_ITEMS = 4;
 
-    private RegisterController controller;
+    private RegisterPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +61,13 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
         txSaleValue.addTextChangedListener(MasksUtil.money(txSaleValue));
         txReceivedValue.addTextChangedListener(MasksUtil.money(txReceivedValue));
 
-        controller = new RegisterController((IRegisterView) this, this);
+        presenter = new RegisterPresenter(this);
 
         btnAddItem.setOnClickListener(v -> addNewItemInput());
         btnRegister.setOnClickListener(v -> {
             List<String> itemsExtra = getItemsDynamics();
 
-            controller.processSale(
+            presenter.processSale(
                     txClientName.getText().toString().trim(),
                     txCpf.getText().toString().trim(),
                     txEmail.getText().toString().trim(),
@@ -118,14 +118,50 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
     }
 
     @Override
-    public void showError(String message) {
-        ShowCustomToast.show(RegisterSalesActivity.this, message, "ERROR");
-    }
-
-    @Override
     public void gotToResume(SaleSerializable sale) {
         Intent intent = new Intent(this, ResumeSaleActivity.class);
         intent.putExtra("saleData", sale);
         startActivity(intent);
+    }
+
+    @Override
+    public void showEmptyFieldsError() {
+        ShowCustomToast.show(this, getString(R.string.fields_null), "ERROR");
+    }
+
+    @Override
+    public void showInvalidCpfError() {
+        ShowCustomToast.show(this, getString(R.string.invalid_cpf), "ERROR");
+    }
+
+    @Override
+    public void showFirstItemRequiredError() {
+        ShowCustomToast.show(this, getString(R.string.first_item_obrig), "ERROR");
+    }
+
+    @Override
+    public void showExtraItemEmptyError(int itemNumber) {
+        String msg = "O Item extra nº " + itemNumber + " está vazio.";
+        ShowCustomToast.show(this, msg, "ERROR");
+    }
+
+    @Override
+    public void showInvalidEmailError() {
+        ShowCustomToast.show(this, getString(R.string.invalid_email), "ERROR");
+    }
+
+    @Override
+    public void showReceivedValueLowerError() {
+        ShowCustomToast.show(this, getString(R.string.value_received), "ERROR");
+    }
+
+    @Override
+    public void showSaleValueInvalidError() {
+        ShowCustomToast.show(this, getString(R.string.value_sale), "ERROR");
+    }
+
+    @Override
+    public void showDataFormatError() {
+        ShowCustomToast.show(this, getString(R.string.error_format_values), "ERROR");
     }
 }
