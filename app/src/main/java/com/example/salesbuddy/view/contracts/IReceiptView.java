@@ -7,7 +7,11 @@ import java.util.List;
 public interface IReceiptView {
     void showData(String name, String cpf, String email, String valSalue, String valReceived, String changeDue);
     void updateList(List<ItemsSale> items);
-    void showMessage(String msg, String type);
+    void showDataLoadError();
+    void showEmailNotFoundError();
+    void showReceiptSendError();
+    void showConnectionError();
+    void showApiError(String message);
     void showSuccessAndNavigate(String email);
     void navigateToNewSale();
     void showLoading(boolean isLoading);

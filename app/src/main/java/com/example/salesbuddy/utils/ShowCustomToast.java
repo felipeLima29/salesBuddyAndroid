@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +20,10 @@ public class ShowCustomToast {
 
         LinearLayout container = layout.findViewById(R.id.toast_root);
         TextView text = layout.findViewById(R.id.toast_text);
-        ImageView image = layout.findViewById(R.id.toast_icon);
 
         text.setText(message);
 
         int colorResId = 0;
-        int iconResId = 0;
 
         switch (type){
             case "SUCCESS":

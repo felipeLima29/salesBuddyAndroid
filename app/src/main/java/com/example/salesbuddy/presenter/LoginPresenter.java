@@ -1,15 +1,8 @@
-package com.example.salesbuddy.controller;
+package com.example.salesbuddy.presenter;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.example.salesbuddy.R;
-import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.api.ApiService;
 import com.example.salesbuddy.model.request.LoginRequest;
 import com.example.salesbuddy.model.request.LoginResponse;
-import com.example.salesbuddy.utils.SharedPreferencesUtil;
-import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.contracts.ILoginView;
 import com.google.gson.Gson;
 
@@ -17,26 +10,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginController {
+public class LoginPresenter {
     private final ILoginView view;
-    private final Context context;
+    private final ApiService apiService;
 
-    public LoginController(ILoginView view, Context context) {
+    public LoginPresenter(ILoginView view, ApiService apiService) {
         this.view = view;
-        this.context = context;
+        this.apiService = apiService;
     }
 
     public void doLogin(String usuario, String password){
         if (usuario.isEmpty() || password.isEmpty()) {
-            view.onLoginError(context.getString(R.string.fields_null));
+            view.onEmptyFieldsError();
             return;
         }
 
         view.showLoading();
 
         LoginRequest loginData = new LoginRequest(usuario, password);
-        ApiService api = RetrofitClient.createService(ApiService.class, context);
-        Call<LoginResponse> responseCall = api.login(loginData);
+        Call<LoginResponse> responseCall = apiService.login(loginData);
 
         responseCall.enqueue(new Callback<LoginResponse>() {
             @Override
@@ -45,13 +37,10 @@ public class LoginController {
                 LoginResponse loginResponse = response.body();
 
                 if (response.isSuccessful() && loginResponse != null){
-                    SharedPreferencesUtil sp = SharedPreferencesUtil.instance(context);
-                    sp.storeValueString(StaticsKeysUtil.Token, loginResponse.getToken());
-
                     if (loginResponse.getLogin()) {
-                        view.onLoginSuccess();
+                        view.onLoginSuccess(loginResponse.getToken());
                     } else {
-                        view.onLoginError(String.valueOf(R.string.data_invalid));
+                        view.onLoginError(loginResponse.getMessage());
                     }
                 } else {
                     try {
@@ -60,10 +49,10 @@ public class LoginController {
                             LoginResponse errorData = gson.fromJson(response.errorBody().charStream(), LoginResponse.class);
                             view.onLoginError(errorData.getMessage());
                         } else {
-                            view.onLoginError(context.getString(R.string.error_server));
+                            view.onConnectionError();
                         }
                     } catch (Exception e) {
-                        view.onLoginError(context.getString(R.string.error_process_response));
+                        view.onConnectionError();
                         e.printStackTrace();
                     }
                 }
@@ -72,7 +61,8 @@ public class LoginController {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                view.onLoginError(context.getString(R.string.error_conex));
+                view.hideLoading();
+                view.onConnectionError();
             }
         });
 

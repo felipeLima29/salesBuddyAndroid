@@ -1,6 +1,4 @@
-package com.example.salesbuddy.controller;
-
-import android.content.Context;
+package com.example.salesbuddy.presenter;
 
 import com.example.salesbuddy.R;
 import com.example.salesbuddy.model.ItemsSale;
@@ -23,19 +21,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReceiptController {
+public class ReceiptPresenter {
     private final IReceiptView view;
-    private final Context context;
+    private final ApiService apiService;
     private SaleSerializable currentSale;
 
-    public ReceiptController(IReceiptView view, Context context) {
+
+    public ReceiptPresenter(IReceiptView view, ApiService apiService) {
         this.view = view;
-        this.context = context;
+        this.apiService = apiService;
     }
 
     public void loadData(SaleSerializable data) {
         if (data == null) {
-            view.showMessage(context.getString(R.string.error_load_data), "ERROR");
+            view.showDataLoadError();
             return;
         }
         this.currentSale = data;
@@ -61,13 +60,13 @@ public class ReceiptController {
 
     }
 
-    public void sendReceipt(File arquive) {
+    public void sendReceipt(File arquive, String token) {
         if (currentSale == null || currentSale.getEmail() == null || currentSale.getEmail().isEmpty()) {
-            view.showMessage(context.getString(R.string.email_not_found), "ERROR");
+            view.showEmailNotFoundError();
             return;
         }
         if (arquive == null) {
-            view.showMessage(context.getString(R.string.error_send_receipt), "ERROR");
+            view.showReceiptSendError();
             return;
         }
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/png"), arquive);
@@ -75,10 +74,9 @@ public class ReceiptController {
 
         view.showLoading(true);
 
-        String token = "Bearer " + SharedPreferencesUtil.instance(context).fetchValueString(StaticsKeysUtil.Token);
-        ApiService api = RetrofitClient.createService(ApiService.class, context);
+        String authHeader = "Bearer " + token;
 
-        Call<ResponseBody> call = api.sendReceipt(body, currentSale.getEmail(), token);
+        Call<ResponseBody> call = apiService.sendReceipt(body, currentSale.getEmail(), authHeader);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -86,13 +84,14 @@ public class ReceiptController {
                 if(response.isSuccessful()) {
                     view.showSuccessAndNavigate(currentSale.getEmail());
                 } else {
-                    view.showMessage(context.getString(R.string.error_send) + response.code(), "ERROR");
+                    view.showApiError("Erro: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                view.showMessage(context.getString(R.string.error_conex), "ERROR");
+                view.showLoading(false);
+                view.showConnectionError();
             }
         });
 

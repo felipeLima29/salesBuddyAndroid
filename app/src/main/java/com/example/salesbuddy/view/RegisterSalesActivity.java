@@ -2,14 +2,11 @@ package com.example.salesbuddy.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.widget.AppCompatButton;
@@ -18,13 +15,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
-import com.example.salesbuddy.controller.RegisterController;
+import com.example.salesbuddy.presenter.RegisterController;
 import com.example.salesbuddy.model.SaleSerializable;
 import com.example.salesbuddy.utils.MasksUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
 import com.example.salesbuddy.view.contracts.IRegisterView;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,22 +64,18 @@ public class RegisterSalesActivity extends IncludeToolbar implements IRegisterVi
         controller = new RegisterController((IRegisterView) this, this);
 
         btnAddItem.setOnClickListener(v -> addNewItemInput());
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnRegister.setOnClickListener(v -> {
+            List<String> itemsExtra = getItemsDynamics();
 
-                List<String> itemsExtra = getItemsDynamics();
-
-                controller.processSale(
-                        txClientName.getText().toString().trim(),
-                        txCpf.getText().toString().trim(),
-                        txEmail.getText().toString().trim(),
-                        txSaleValue.getText().toString(),
-                        txReceivedValue.getText().toString(),
-                        txItemName.getText().toString().trim(),
-                        itemsExtra
-                );
-            }
+            controller.processSale(
+                    txClientName.getText().toString().trim(),
+                    txCpf.getText().toString().trim(),
+                    txEmail.getText().toString().trim(),
+                    txSaleValue.getText().toString(),
+                    txReceivedValue.getText().toString(),
+                    txItemName.getText().toString().trim(),
+                    itemsExtra
+            );
         });
 
         configToolbar(getString(R.string.register_sale), HomeActivity.class);

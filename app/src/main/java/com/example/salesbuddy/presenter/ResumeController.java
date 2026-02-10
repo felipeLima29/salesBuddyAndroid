@@ -1,4 +1,4 @@
-package com.example.salesbuddy.controller;
+package com.example.salesbuddy.presenter;
 
 import android.content.Context;
 

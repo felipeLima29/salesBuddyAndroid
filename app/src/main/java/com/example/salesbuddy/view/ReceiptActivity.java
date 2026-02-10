@@ -21,10 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
-import com.example.salesbuddy.controller.ReceiptController;
+import com.example.salesbuddy.model.RetrofitClient;
+import com.example.salesbuddy.model.api.ApiService;
+import com.example.salesbuddy.presenter.ReceiptPresenter;
 import com.example.salesbuddy.model.ItemsSale;
 import com.example.salesbuddy.model.SaleSerializable;
+import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
+import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
 import com.example.salesbuddy.view.contracts.IReceiptView;
 import com.example.salesbuddy.view.dialog.MessageDialog;
@@ -41,7 +45,7 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
     private SaleSerializable saleDataReceived;
     private List<ItemsSale> itemsSale = new ArrayList<>();
     private AlertDialog loadingDialog;
-    private ReceiptController controller;
+    private ReceiptPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,9 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
 
-        controller = new ReceiptController(this, this);
+        ApiService apiService = RetrofitClient.createService(ApiService.class, this);
+        presenter = new ReceiptPresenter(this, apiService);
+
         configToolbar(getString(R.string.receipt), ResumeSaleActivity.class);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
@@ -79,7 +85,7 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
             saleDataReceived = (SaleSerializable) getIntent().getSerializableExtra("saleData");
         }
 
-        controller.loadData(saleDataReceived);
+        presenter.loadData(saleDataReceived);
 
         btnBackReceipt.setOnClickListener(v -> navigateToNewSale());
 
@@ -87,9 +93,10 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
             if (layout != null) {
                 Bitmap bitmap = getBitMapFromView(layout);
                 File file = saveBitMapToFile(bitmap);
-                controller.sendReceipt(file);
+                String token = SharedPreferencesUtil.instance(this).fetchValueString(StaticsKeysUtil.Token);
+                presenter.sendReceipt(file, token);
             } else {
-                ShowCustomToast.show(this, getString(R.string.error_print), "ERROR");
+                showApiError(getString(R.string.error_print));
             }
         });
     }
@@ -145,8 +152,28 @@ public class ReceiptActivity extends IncludeToolbar implements IReceiptView {
     }
 
     @Override
-    public void showMessage(String msg, String type) {
-        ShowCustomToast.show(this, msg, type);
+    public void showDataLoadError() {
+        ShowCustomToast.show(this, getString(R.string.error_load_data), "ERROR");
+    }
+
+    @Override
+    public void showEmailNotFoundError() {
+        ShowCustomToast.show(this, getString(R.string.email_not_found), "ERROR");
+    }
+
+    @Override
+    public void showReceiptSendError() {
+        ShowCustomToast.show(this, getString(R.string.error_send_receipt), "ERROR");
+    }
+
+    @Override
+    public void showConnectionError() {
+        ShowCustomToast.show(this, getString(R.string.error_conex), "ERROR");
+    }
+
+    @Override
+    public void showApiError(String message) {
+        ShowCustomToast.show(this, message, "ERROR");
     }
 
     @Override

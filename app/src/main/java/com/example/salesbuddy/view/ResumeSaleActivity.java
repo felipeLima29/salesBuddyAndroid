@@ -1,13 +1,8 @@
 package com.example.salesbuddy.view;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.widget.AppCompatButton;
@@ -18,29 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.salesbuddy.R;
-import com.example.salesbuddy.controller.ResumeController;
+import com.example.salesbuddy.presenter.ResumeController;
 import com.example.salesbuddy.model.ItemsSale;
-import com.example.salesbuddy.model.RetrofitClient;
 import com.example.salesbuddy.model.SaleSerializable;
-import com.example.salesbuddy.model.api.ApiService;
-import com.example.salesbuddy.model.request.SalesResponse;
-import com.example.salesbuddy.utils.MasksUtil;
-import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
-import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.adapter.ResumeAdapter;
 import com.example.salesbuddy.view.contracts.IResumeView;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
-    private SaleSerializable saleDataReceived;
     private AppCompatButton btnFinishSale, btnAlter;
     private TextView tvShowName, tvShowCpf, tvShowEmail, tvShowValueReceived, tvValueSale, tvDueChange;
     private ResumeAdapter adapter;
@@ -73,7 +56,7 @@ public class ResumeSaleActivity extends IncludeToolbar implements IResumeView {
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         rvItems.setAdapter(adapter);
 
-        controller = new ResumeController((IResumeView) this, this);
+        controller = new ResumeController(this, this);
 
         configToolbar(getString(R.string.resume_sale), RegisterSalesActivity.class);
 

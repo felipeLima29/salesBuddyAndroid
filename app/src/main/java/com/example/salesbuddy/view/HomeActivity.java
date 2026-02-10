@@ -43,56 +43,38 @@ public class HomeActivity extends AppCompatActivity {
         optReprocess = findViewById(R.id.optReprocess);
         optLogOut = findViewById(R.id.optLogOut);
 
-        btnReprocess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ReprocessingActivity.class);
-                startActivity(intent);
-            }
+        btnReprocess.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, ReprocessingActivity.class);
+            startActivity(intent);
         });
 
         configClick();
     }
 
     private void configClick(){
-
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleMenu();
-            }
-        });
-        optRegisterSale.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, RegisterSalesActivity.class);
-                startActivity(intent);
-            }
+        btnMenu.setOnClickListener(v -> {
+            toggleMenu();
         });
 
-        optReprocess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ReprocessingActivity.class);
-                startActivity(intent);
-            }
+        optRegisterSale.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, RegisterSalesActivity.class);
+            startActivity(intent);
         });
 
-        btnRegisterSale.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this , RegisterSalesActivity.class);
-                startActivity(intent);
-            }
+        optReprocess.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, ReprocessingActivity.class);
+            startActivity(intent);
         });
 
-        optLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        btnRegisterSale.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this , RegisterSalesActivity.class);
+            startActivity(intent);
+        });
+
+        optLogOut.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
     }

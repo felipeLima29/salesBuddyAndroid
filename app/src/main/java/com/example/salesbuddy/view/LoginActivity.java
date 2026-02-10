@@ -2,7 +2,6 @@ package com.example.salesbuddy.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -12,8 +11,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.salesbuddy.R;
-import com.example.salesbuddy.controller.LoginController;
+import com.example.salesbuddy.model.RetrofitClient;
+import com.example.salesbuddy.model.api.ApiService;
+import com.example.salesbuddy.presenter.LoginPresenter;
+import com.example.salesbuddy.utils.SharedPreferencesUtil;
 import com.example.salesbuddy.utils.ShowCustomToast;
+import com.example.salesbuddy.utils.StaticsKeysUtil;
 import com.example.salesbuddy.view.contracts.ILoginView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -23,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     private Button btnLogin;
     private TextInputLayout txInputUser, txInputPassword;
 
-    private LoginController controller;
+    private LoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +43,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         txInputUser = findViewById(R.id.txInputUser);
         txInputPassword = findViewById(R.id.txInputPassword);
 
-        controller = new LoginController(this, this);
+        ApiService apiService = RetrofitClient.createService(ApiService.class, this);
+        presenter = new LoginPresenter(this, apiService);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String usuario = Objects.requireNonNull(txInputUser.getEditText().getText().toString().trim());
-                String password = Objects.requireNonNull(txInputPassword.getEditText().getText().toString().trim());
-                controller.doLogin(usuario, password);
-            }
+        btnLogin.setOnClickListener(v -> {
+            String usuario = Objects.requireNonNull(txInputUser.getEditText().getText().toString().trim());
+            String password = Objects.requireNonNull(txInputPassword.getEditText().getText().toString().trim());
+            presenter.doLogin(usuario, password);
         });
     }
 
@@ -64,7 +65,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     @Override
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String token) {
+        SharedPreferencesUtil sp = SharedPreferencesUtil.instance(getApplicationContext());
+        sp.storeValueString(StaticsKeysUtil.Token, token);
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
         finish();
@@ -73,5 +76,17 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void onLoginError(String message) {
         ShowCustomToast.show(getApplicationContext(), message, "ERROR");
+    }
+
+    @Override
+    public void onEmptyFieldsError() {
+        String msg = getString(R.string.fields_null);
+        ShowCustomToast.show(getApplicationContext(), msg, "ERROR");
+    }
+
+    @Override
+    public void onConnectionError() {
+        String msg = getString(R.string.error_conex);
+        ShowCustomToast.show(this, msg, "ERROR");
     }
 }
